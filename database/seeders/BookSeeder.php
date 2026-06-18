@@ -15,15 +15,17 @@ class BookSeeder extends Seeder
      */
     public function run(): void
     {
-        Book::firstOrCreate([                  
+        $book1 = Book::firstOrCreate([                  
             'name' => '吾輩は猫である',
             'author' => '夏目漱石',
             'isbn_code' => '9784101010014',
             'publication_date' => '1905-01-01',
             'image_url' => 'img',
-            'user_id' => User::first()->id
+            'user_id' => User::first()->id,
         ]);
-        Book::firstOrCreate([                  
+        $book1->genres()->sync([1]);
+
+        $book2=Book::firstOrCreate([                  
             'name' => '人を動かす',
             'author' => 'D・カーネギー',
             'isbn_code' => '9784422100524',
@@ -31,7 +33,9 @@ class BookSeeder extends Seeder
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
-        Book::firstOrCreate([                  
+        $book2->genres()->sync([2,4]);
+
+        $book3=Book::firstOrCreate([                  
             'name' => ' リーダブルコード',
             'author' => ' Dustin Boswell',
             'isbn_code' => '9784873115658',
@@ -39,7 +43,9 @@ class BookSeeder extends Seeder
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
-        Book::firstOrCreate([                  
+        $book3->genres()->sync([3]);
+
+        $book4=Book::firstOrCreate([                  
             'name' => '7つの習慣',
             'author' => 'スティーブン・R・コヴィー',
             'isbn_code' => '9784863940246',
@@ -47,7 +53,9 @@ class BookSeeder extends Seeder
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
-        Book::firstOrCreate([                  
+        $book4->genres()->sync([2,4]);
+
+        $book5=Book::firstOrCreate([                  
             'name' => '坊っちゃん',
             'author' => '夏目漱石',
             'isbn_code' => '9784101010021',
@@ -55,7 +63,9 @@ class BookSeeder extends Seeder
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
-        Book::firstOrCreate([                  
+        $book5->genres()->sync([1]);
+
+        $book6=Book::firstOrCreate([                  
             'name' => 'サピエンス全史',
             'author' => 'ユヴァル・ノア・ハラリ',
             'isbn_code' => '9784309226712',
@@ -63,7 +73,9 @@ class BookSeeder extends Seeder
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
-        Book::firstOrCreate([                  
+        $book6->genres()->sync([6,7]);
+
+        $book7=Book::firstOrCreate([                  
             'name' => 'Clean Code',
             'author' => 'Robert C. Martin',
             'isbn_code' => '9784048930598',
@@ -71,7 +83,9 @@ class BookSeeder extends Seeder
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
-        Book::firstOrCreate([                  
+        $book7->genres()->sync([3]);
+
+        $book8=Book::firstOrCreate([                  
             'name' => '嫌われる勇気',
             'author' => '岸見一郎・古賀史健',
             'isbn_code' => '9784478025819',
@@ -79,7 +93,9 @@ class BookSeeder extends Seeder
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
-        Book::firstOrCreate([                  
+        $book8->genres()->sync([4]);
+
+        $book9=Book::firstOrCreate([                  
             'name' => '火花',
             'author' => '又吉直樹',
             'isbn_code' => '9784163902302',
@@ -87,7 +103,9 @@ class BookSeeder extends Seeder
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
-        Book::firstOrCreate([                  
+        $book9->genres()->sync([1]);
+
+        $book10=Book::firstOrCreate([                  
             'name' => 'FACTFULNESS',
             'author' => 'ハンス・ロスリング',
             'isbn_code' => '9784822289607',
@@ -95,7 +113,9 @@ class BookSeeder extends Seeder
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
-        Book::firstOrCreate([                  
+        $book10->genres()->sync([2,7]);
+
+        $book11=Book::firstOrCreate([                  
             'name' => 'コンテナ物語',
             'author' => ' マルク・レビンソン',
             'isbn_code' => '9784822251468',
@@ -103,5 +123,6 @@ class BookSeeder extends Seeder
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
+        $book11->genres()->sync([2,6]);
     }
 }

@@ -13,7 +13,7 @@ class GenreSeeder extends Seeder
      */
     public function run(): void
     {
-        Genre::create([                  
+        Genre::firstOrCreate([                  
             'name' => '小説',
             'name' => 'ビジネス',
             'name' => '技術書',

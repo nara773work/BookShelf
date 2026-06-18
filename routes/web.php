@@ -5,9 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\BookController;
-Route::get('/books',[BookController::class,'index']);
+Route::get('/books',[BookController::class,'index'])->name('books.index');
 
-Route::get('/books/{$book->id}',[BookController::class,'show']);
+Route::get('/books/{$book->id}',[BookController::class,'show'])->name('books.show');
 
 Route::get('/books/cretae',[BookController::class,'store'])->name('books.create');
 Route::post('/books/cretae',[BookController::class,'store']);

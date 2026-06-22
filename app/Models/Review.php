@@ -10,13 +10,13 @@ class Review extends Model
     use HasFactory;
     protected $fillable = ['rating', 'comment', 'user_id', 'book_id'];
 
-    public function users()
+    public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(User::class);
     }
-    public function books()
+    public function book()
     {
-        return $this->hasMany(Book::class);
+        return $this->belongsTo(Book::class);
     }
     public function reviewLikes()
     {

@@ -5,28 +5,66 @@ use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\RankingController;
+//publiced
 Route::get('/books',[BookController::class,'index'])->name('books.index');
+Route::get('/books/{book}',[BookController::class,'show'])->name('books.show');
+Route::get('/ranking',[RankingController::class,'index'])->name('ranking.index');
 
-Route::get('/books/{$book->id}',[BookController::class,'show'])->name('books.show');
-
-Route::get('/books/cretae',[BookController::class,'store'])->name('books.create');
+//authed
+//book create
+Route::middleware('auth')
+->group(function () {
+    Route::get('/books/create', [BookController::class, 'store'])->name('books.create');
+    });
 Route::post('/books/cretae',[BookController::class,'store']);
 
-Route::get('/books/{$book->id}/edit',[BookController::class,'edit']);
-Route::post('/books/{$book->id}/edit',[BookController::class,'update']);
+//book edit
+Route::middleware('auth')
+->group(function () {
+    Route::get('/books/{book}/edit', [BookController::class, 'edit']);
+    });
+Route::put('/books/{$book->id}/edit',[BookController::class,'update']);
 Route::delete('/books/{$book->id}/edit',[BookController::class,'destroy']);
 
-
+//genre index
 use App\Http\Controllers\GenreController;
-Route::get('/genre',[GenreController::class,'index']);
+Route::middleware('auth')
+->group(function () {
+    Route::get('genre', [BookController::class, 'index'])->name('genres.index');
+    });
 
-Route::get('/genre/{$genre->id}',[GenreController::class,'show']);
+//genre show
+Route::middleware('auth')
+->group(function () {
+    Route::get('/genre/{genre}', [BookController::class, 'show']);
+    });
 
-Route::get('/genre/create',[GenreController::class,'store']);
+//genre create    
+Route::middleware('auth')
+->group(function () {
+    Route::get('/genre/create', [BookController::class, 'store']);
+    });
 Route::post('/books/cretae',[BookController::class,'store']);
 
-Route::get('/genre/{$genre->id}/edit',[GenreController::class,'edit']);
-Route::post('/books/{$book->id}/edit',[BookController::class,'update']);
-Route::delete('/books/{$book->id}/edit',[BookController::class,'destroy']);
+//genre edit
+Route::middleware('auth')
+->group(function () {
+    Route::get('/genre/{genre}/edit', [BookController::class,'edit']);
+    });
+Route::put('/books/{$book->id}/edit',[BookController::class,'update']);
+Route::delete('/books/{book}/edit',[BookController::class,'destroy']);
 
+//review edit
 use App\Http\Controllers\ReviewController;
+Route::middleware('auth')
+->group(function () {
+    Route::get('/review/{review}/edit', [BookController::class,'edit']);
+    });
+
+//favorite edit
+use App\Http\Controllers\FavoriteController;
+Route::middleware('auth')
+->group(function () {
+    Route::get('/favorites', [FavoriteController::class,'index'])->name('favorites.index');
+    });    

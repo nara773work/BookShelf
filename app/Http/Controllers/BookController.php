@@ -9,11 +9,17 @@ class BookController extends Controller
 {
     public function index(){
         $books = Book::paginate(10);
+        
         return view('books.index',compact('books'));
     }
 
-    public function show(Request $request ,$id){
-        
-        return view('books.show',compact('books'));
+    public function show($id){
+
+        $book = Book::findOrFail($id);
+        return view('books.show',compact('book'));
+    }
+
+    public function store(){
+        return view('books.create');
     }
 }

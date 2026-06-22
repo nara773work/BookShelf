@@ -10,15 +10,29 @@ class Book extends Model
     use HasFactory;
     protected $fillable = 
     [
-        'name', 'author', 'isbn_code', 'publication_date','description','img','user_id'
+        'name',
+        'author',
+        'isbn_code',
+        'publication_date',
+        'description',
+        'img',
+        'user_id'
     ];
 
     public function genres()
     {
-        return $this->belongsToMany(Genre::class, 'book_genre', 'book_id','genre_id');
+        return $this->belongsToMany(Genre::class);
+    }
+    public function favorites()
+    {
+        return $this->belongsToMany(User::class,'favorites','book_id','user_id');
     }
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(user::class);
     }
 }

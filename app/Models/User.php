@@ -43,16 +43,20 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function book()
+    public function books()
     {
-        return $this->belongsTo(Book::class);
+        return $this->hasMany(Book::class);
     }
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
-    public function favorites()
+    public function favoritebooks()
     {
         return $this->belongsToMany(Book::class, 'favorites', 'user_id', 'book_id');
+    }
+    public function reviewLikes()
+    {
+        return $this->belongsToMany(Review::class, 'review_Likes', 'user_id', 'review_id');
     }
 }

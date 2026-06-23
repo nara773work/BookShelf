@@ -43,7 +43,7 @@ class BookController extends Controller
             'user_id' => auth()->id()
         ]);
 
-        $book->genres()->attach($request->genre_ids);
+        $book->genres()->attach($request->genre);
 
         return redirect('');
     }

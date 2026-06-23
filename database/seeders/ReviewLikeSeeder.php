@@ -33,7 +33,7 @@ class ReviewLikeSeeder extends Seeder
             ->take($likeCount)
             ->toArray();
 
-            $review->reviewLikes()
+            $review->likedByUsers()
             ->syncWithoutDetaching($randomUserIds);
         }   
     }

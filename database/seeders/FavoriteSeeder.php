@@ -25,7 +25,7 @@ class FavoriteSeeder extends Seeder
 
             $random_bookid = array_map(fn($key) => $books[$key], $random_book);
 
-            $user->favorites()->syncWithoutDetaching($random_bookid);         
+            $user->favoritebooks()->syncWithoutDetaching($random_bookid);         
         }        
     }
 }

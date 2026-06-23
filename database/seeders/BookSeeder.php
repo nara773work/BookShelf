@@ -18,8 +18,8 @@ class BookSeeder extends Seeder
         $book1 = Book::firstOrCreate([                  
             'title' => '吾輩は猫である',
             'author' => '夏目漱石',
-            'isbn_code' => '9784101010014',
-            'publication_date' => '1905-01-01',
+            'isbn' => '9784101010014',
+            'published_date' => '1905-01-01',
             'image_url' => 'img',
             'user_id' => User::first()->id,
         ]);
@@ -28,8 +28,8 @@ class BookSeeder extends Seeder
         $book2=Book::firstOrCreate([                  
             'title' => '人を動かす',
             'author' => 'D・カーネギー',
-            'isbn_code' => '9784422100524',
-            'publication_date' => '1936-10-01',
+            'isbn' => '9784422100524',
+            'published_date' => '1936-10-01',
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
@@ -38,8 +38,8 @@ class BookSeeder extends Seeder
         $book3=Book::firstOrCreate([                  
             'title' => ' リーダブルコード',
             'author' => ' Dustin Boswell',
-            'isbn_code' => '9784873115658',
-            'publication_date' => '2012-06-23',
+            'isbn' => '9784873115658',
+            'published_date' => '2012-06-23',
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
@@ -48,8 +48,8 @@ class BookSeeder extends Seeder
         $book4=Book::firstOrCreate([                  
             'title' => '7つの習慣',
             'author' => 'スティーブン・R・コヴィー',
-            'isbn_code' => '9784863940246',
-            'publication_date' => '2013-08-30',
+            'isbn' => '9784863940246',
+            'published_date' => '2013-08-30',
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
@@ -58,8 +58,8 @@ class BookSeeder extends Seeder
         $book5=Book::firstOrCreate([                  
             'title' => '坊っちゃん',
             'author' => '夏目漱石',
-            'isbn_code' => '9784101010021',
-            'publication_date' => '1906-04-01',
+            'isbn' => '9784101010021',
+            'published_date' => '1906-04-01',
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
@@ -68,8 +68,8 @@ class BookSeeder extends Seeder
         $book6=Book::firstOrCreate([                  
             'title' => 'サピエンス全史',
             'author' => 'ユヴァル・ノア・ハラリ',
-            'isbn_code' => '9784309226712',
-            'publication_date' => '2016-09-08',
+            'isbn' => '9784309226712',
+            'published_date' => '2016-09-08',
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
@@ -78,8 +78,8 @@ class BookSeeder extends Seeder
         $book7=Book::firstOrCreate([                  
             'title' => 'Clean Code',
             'author' => 'Robert C. Martin',
-            'isbn_code' => '9784048930598',
-            'publication_date' => '2017-12-18',
+            'isbn' => '9784048930598',
+            'published_date' => '2017-12-18',
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
@@ -88,8 +88,8 @@ class BookSeeder extends Seeder
         $book8=Book::firstOrCreate([                  
             'title' => '嫌われる勇気',
             'author' => '岸見一郎・古賀史健',
-            'isbn_code' => '9784478025819',
-            'publication_date' => '2013-12-13',
+            'isbn' => '9784478025819',
+            'published_date' => '2013-12-13',
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
@@ -98,8 +98,8 @@ class BookSeeder extends Seeder
         $book9=Book::firstOrCreate([                  
             'title' => '火花',
             'author' => '又吉直樹',
-            'isbn_code' => '9784163902302',
-            'publication_date' => '2015-03-11',
+            'isbn' => '9784163902302',
+            'published_date' => '2015-03-11',
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
@@ -108,8 +108,8 @@ class BookSeeder extends Seeder
         $book10=Book::firstOrCreate([                  
             'title' => 'FACTFULNESS',
             'author' => 'ハンス・ロスリング',
-            'isbn_code' => '9784822289607',
-            'publication_date' => '2019-01-11',
+            'isbn' => '9784822289607',
+            'published_date' => '2019-01-11',
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);
@@ -118,8 +118,8 @@ class BookSeeder extends Seeder
         $book11=Book::firstOrCreate([                  
             'title' => 'コンテナ物語',
             'author' => ' マルク・レビンソン',
-            'isbn_code' => '9784822251468',
-            'publication_date' => '2007-01-18',
+            'isbn' => '9784822251468',
+            'published_date' => '2007-01-18',
             'image_url' => 'img',
             'user_id' => User::first()->id
         ]);

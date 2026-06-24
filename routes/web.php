@@ -24,12 +24,12 @@ Route::middleware('auth')->group(function () {
     });
 
 
-//genre 新規登録
+//genres 新規登録
 Route::middleware('auth')
 ->group(function () {
-    Route::get('genre', [BookController::class, 'index'])->name('genres.index');
-    Route::get('/genre/create', [BookController::class, 'create']);
-    Route::post('/books',[BookController::class,'store']);
+    Route::get('/genres', [GenreController::class, 'index'])->name('genres.index');
+    Route::get('/genres/create', [GenreController::class, 'create'])->name('genres.create');
+    Route::post('/genres/create', [GenreController::class, 'store'])->name('genres.store');
     });
 
 
@@ -62,13 +62,13 @@ Route::middleware('auth')->group(function () {
     });
 
 
-//genre 
+//genres 
 Route::middleware('auth')
 ->group(function () {
-    Route::get('/genre/{genre}', [BookController::class, 'show']);
-    Route::get('/genre/{genre}/edit', [BookController::class,'edit']);
-    Route::put('/books/{$book->id}/edit',[BookController::class,'update']);
-    Route::delete('/books/{book}/edit',[BookController::class,'destroy']);
+    Route::get('/genres/{genre}', [GenreController::class, 'show'])->name('genres.show');
+    Route::get('/genres/{genre}/edit', [GenreController::class,'edit'])->name('genres.edit');
+    Route::put('/books/{$book->id}/edit',[GenreController::class,'update'])->name('genres.update');
+    Route::delete('/books/{book}/edit',[GenreController::class,'destroy'])->name('genres.destroy');
     });
 
 

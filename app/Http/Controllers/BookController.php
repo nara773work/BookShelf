@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\Review;
 use App\Models\Genre;
+use App\Http\Requests\BookRequest;
 
 class BookController extends Controller
 {
@@ -31,7 +32,7 @@ class BookController extends Controller
         return view('books.create',compact('genres'));
     }
 
-    public function store(Request $request){
+    public function store(BookRequest $request){
         
         $book = Book::create([
             'title' => $request->title,
@@ -43,8 +44,15 @@ class BookController extends Controller
             'user_id' => auth()->id()
         ]);
 
-        $book->genres()->attach($request->genre);
+        $book->genres()->attach($request->genres);
 
-        return redirect('');
+        return redirect('/books');
+    }
+
+    public function toggle($id){
+        $book = Book::findOrFail($id);
+        auth()->user()->favoritebooks()->toggle($book->id);
+
+        return back();
     }
 }

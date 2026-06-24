@@ -14,10 +14,13 @@ class Review extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public function book()
     {
         return $this->belongsTo(Book::class);
     }
+    
+    //いいね
     public function likedByUsers()
     {
         return $this->belongsToMany(User::class, 'review_likes', 'review_id','user_id');

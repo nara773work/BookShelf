@@ -16,14 +16,14 @@ class Book extends Model
         'published_date',
         'description',
         'image_url',
-        'user_id'
+        'user_id',
     ];
 
     public function genres()
     {
         return $this->belongsToMany(Genre::class);
     }
-    public function favorites()
+    public function favoritebooks()
     {
         return $this->belongsToMany(User::class,'favorites','book_id','user_id');
     }

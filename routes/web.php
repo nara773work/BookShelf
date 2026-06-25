@@ -67,8 +67,8 @@ Route::middleware('auth')
 ->group(function () {
     Route::get('/genres/{genre}', [GenreController::class, 'show'])->name('genres.show');
     Route::get('/genres/{genre}/edit', [GenreController::class,'edit'])->name('genres.edit');
-    Route::put('/books/{$book->id}/edit',[GenreController::class,'update'])->name('genres.update');
-    Route::delete('/books/{book}/edit',[GenreController::class,'destroy'])->name('genres.destroy');
+    Route::put('/books/{genre}/edit',[GenreController::class,'update'])->name('genres.update');
+    Route::delete('/books/{genre}/edit',[GenreController::class,'destroy'])->name('genres.destroy');
     });
 
 

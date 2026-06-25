@@ -16,9 +16,7 @@ class BookController extends Controller
         return view('books.index',compact('books'));
     }
 
-    public function show($id){
-
-        $book = Book::find($id);
+    public function show(Book $book){
 
         $review = Review::withCount('likedByUsers')->get();
 
@@ -55,4 +53,35 @@ class BookController extends Controller
 
         return back();
     }
+
+    public function edit(Book $book){
+        $this->authorize('update', $book);
+        $genres = Genre::all();
+        return view('books.edit',compact('book','genres'));
+    }
+
+    public function update(Book $book,BookRequest $request){
+        $this->authorize('update', $book);
+        
+        $book->update([
+            'title' => $request->title,
+            'author' => $request->author,
+            'isbn' => $request->isbn,
+            'published_date' => $request->published_date,
+            'description' => $request->description,
+            'image_url' => $request->image_url,
+        ]);
+        $book->genres()->sync($request->genres);
+
+        return redirect('/books');
+    }
+
+    public function destroy(Book $book,Request $request){
+        $this->authorize('update', $book);
+
+        $book->delete();
+        
+        return redirect()->route('books.index'); 
+    }
+
 }

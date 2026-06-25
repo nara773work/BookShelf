@@ -24,7 +24,7 @@ class BookRequest extends FormRequest
         return [
             'title' =>['required','max:150',],
             'author'=>['required','max:100','string'],
-            'isbn'=>['required','max:13','min:13','integer'],
+            'isbn'=>['required','digits:13','integer'],
             'published_date'=>['required'],
             'description'=>['max:255'], //説明の中で数字を使う可能性を考慮し文字列のみにしない
             'image_url',
@@ -41,8 +41,7 @@ class BookRequest extends FormRequest
             'author.max'=>'100字以内で入力してください',
             'author.string'=>'文字列で入力してください',
             'isbn.required' => 'isbnコードを入力してください',
-            'isbn.max'=>'13字で入力してください',
-            'isbn.min'=>'13字で入力してください',
+            'isbn.digits'=>'13字で入力してください',
             'isbn.integer'=>'数字で入力してください',
             'published_date.required' => '出版日を入力してください',
             'description.max'=>'255字以内で入力してください',

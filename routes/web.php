@@ -36,8 +36,8 @@ Route::middleware('auth')
 //review 新規登録、自分のレビュー表示
 Route::middleware('auth')
 ->group(function () {
-    Route::post('/review', [ReviewController::class,'store'])->name('reviews.store');
-    Route::get('/reviews/{review}/edit',[ReviewController::class,'store']);
+    Route::post('/books/{book}', [ReviewController::class,'store'])->name('reviews.store');
+    Route::get('/reviews/{review}/edit',[ReviewController::class,'edit'])->name('reviews.edit');
     });
 
 
@@ -55,10 +55,10 @@ Route::get('/books/{book}',[BookController::class,'show'])->name('books.show');
 
 //book お気に入り登録、編集
 Route::middleware('auth')->group(function () {
-    Route::post('/books/{books}/favorite', [BookController::class,'toggle'])->name('favorites.toggle');
-    Route::get('/books/{book}/edit', [BookController::class, 'edit']);
-    Route::put('/books/{$book->id}/edit',[BookController::class,'update']);
-    Route::delete('/books/{$book->id}/edit',[BookController::class,'destroy']);
+    Route::post('/books/{book}/favorite', [BookController::class,'toggle'])->name('favorites.toggle');
+    Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
+    Route::put('/books/{book}/put',[BookController::class,'update'])->name('books.update');
+    Route::delete('/books/{book}/delete',[BookController::class,'destroy'])->name('books.destroy');
     });
 
 
@@ -72,10 +72,10 @@ Route::middleware('auth')
     });
 
 
-//review 
+//review いいね、
 Route::middleware('auth')
 ->group(function () {
     Route::post('/review/{review}/like', [ReviewController::class,'toggle'])->name('reviews.like');
-    Route::post('/review/{review}/create', [ReviewController::class,'create'])->name('reviews.create');
-    Route::post('/review/{review}/store', [ReviewController::class,'store'])->name('reviews.store');
+    Route::put('/review/{review}/update', [ReviewController::class,'update'])->name('reviews.update');
+    Route::delete('/review/{review}/delete', [ReviewController::class,'destroy'])->name('reviews.destroy');
     });

@@ -72,7 +72,7 @@ Route::middleware('auth')
     });
 
 
-//review いいね、
+//review いいね
 Route::middleware('auth')
 ->group(function () {
     Route::post('/review/{review}/like', [ReviewController::class,'toggle'])->name('reviews.like');

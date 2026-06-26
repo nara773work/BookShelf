@@ -1,0 +1,121 @@
+<?php
+
+namespace App\Http\Controllers\Api\v1;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Book;
+use App\Http\Resources\BookResource;
+use App\Http\Requests\BookRequest;
+
+class BookController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $books = Book::withCount('reviews')
+        ->withAvg('reviews', 'rating')
+        ->get();
+
+        return BookResource::collection($books)
+        ->additional(['message' => '書籍一覧を取得しました'])
+        ->response()
+        ->setStatusCode(200);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(BookRequest $request)
+    {
+        $book = Book::create([
+            'title' => $request->title,
+            'author' => $request->author,
+            'isbn' => $request->isbn,
+            'published_date' => $request->published_date,
+            'description' => $request->description,
+            'image_url' => $request->image_url,
+            'user_id' => 1
+        ]);
+
+        $book->genres()->attach($request->genres);
+
+        return (new BookResource($book))
+        ->additional(['message' => '書籍の登録に成功しました'])
+        ->response()
+        ->setStatusCode(201);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $book = Book::with(['genres','reviews'])
+        ->find($id);
+        
+        if (!$book) {
+            return response()->json([
+                'message' => '指定された書籍IDが見つかりません'
+            ], 404);
+        }
+
+        return (new BookResource($book))
+        ->additional(['message' => '書籍の詳細取得に成功しました'])
+        ->response()
+        ->setStatusCode(200);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(BookRequest $request, string $id)
+    {
+        $book = Book::with(['genres','reviews'])
+        ->find($id);
+
+        if (!$book) {
+            return response()->json([
+                'message' => '書籍が見つかりません'
+            ], 404);
+        }
+
+        $book->update([
+            'title' => $request->title,
+            'author' => $request->author,
+            'isbn' => $request->isbn,
+            'published_date' => $request->published_date,
+            'description' => $request->description,
+            'image_url' => $request->image_url,
+        ]);
+
+        $book->genres()->sync($request->genres);
+
+        return (new BookResource($book))
+        ->additional(['message' => '書籍の更新に成功しました'])
+        ->response()
+        ->setStatusCode(200);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $book = Book::with(['genres','reviews'])
+        ->find($id);
+
+        if (!$book) {
+        return response()->json([
+            'message' => '書籍が見つかりません'
+        ], 404);
+    }
+
+        $book->delete();
+
+        return response()->json(null, 204);
+    }
+}

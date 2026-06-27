@@ -11,6 +11,7 @@ use App\Http\Requests\BookRequest;
 class BookController extends Controller
 {
     public function index(){
+
         $books = Book::paginate(10);
         
         return view('books.index',compact('books'));
@@ -44,11 +45,15 @@ class BookController extends Controller
 
         $book->genres()->attach($request->genres);
 
-        return redirect('/books');
+        return redirect()
+        ->route('books.index')
+        ->with('success', '書籍を登録しました'); 
     }
 
     public function toggle($id){
+
         $book = Book::findOrFail($id);
+
         auth()->user()->favoritebooks()->toggle($book->id);
 
         return back();
@@ -56,7 +61,9 @@ class BookController extends Controller
 
     public function edit(Book $book){
         $this->authorize('update', $book);
+        
         $genres = Genre::all();
+
         return view('books.edit',compact('book','genres'));
     }
 
@@ -73,7 +80,9 @@ class BookController extends Controller
         ]);
         $book->genres()->sync($request->genres);
 
-        return redirect('/books');
+        return redirect()
+        ->route('books.index')
+        ->with('success', '書籍を編集しました'); 
     }
 
     public function destroy(Book $book,Request $request){
@@ -81,7 +90,9 @@ class BookController extends Controller
 
         $book->delete();
         
-        return redirect()->route('books.index'); 
+        return redirect()
+        ->route('books.index')
+        ->with('success', '書籍を削除しました'); 
     }
 
 }

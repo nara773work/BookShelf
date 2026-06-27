@@ -13,17 +13,34 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $books = Book::withCount('reviews')
-        ->withAvg('reviews', 'rating')
-        ->get();
+        $query = Book::query();
+
+        $query->withCount('reviews')
+              ->withAvg('reviews', 'rating');
+
+        if($request->filled('keyword')){
+            $keyword = $request->keyword;
+
+            $query->where(function ($q) use ($keyword) {
+            $q->where('title', 'like', "%{$keyword}%")
+              ->orWhere('author', 'like', "%{$keyword}%");
+              });
+        }
+
+        if ($request->filled('genres')) {
+            $query->whereHas('genres', function ($q) use ($request) {
+                $q->where('genres.id', $request->genres);
+            });
+        }
+
+        $books = $query->paginate(10);
 
         return BookResource::collection($books)
-        ->additional(['message' => '書籍一覧を取得しました'])
+        ->additional(['message' => '書籍一覧の取得に成功しました'])
         ->response()
         ->setStatusCode(200);
-
     }
 
     /**
@@ -59,7 +76,7 @@ class BookController extends Controller
         
         if (!$book) {
             return response()->json([
-                'message' => '指定された書籍IDが見つかりません'
+                'message' => '書籍が存在しません'
             ], 404);
         }
 
@@ -79,7 +96,7 @@ class BookController extends Controller
 
         if (!$book) {
             return response()->json([
-                'message' => '書籍が見つかりません'
+                'message' => '書籍が存在しません'
             ], 404);
         }
 
@@ -110,12 +127,15 @@ class BookController extends Controller
 
         if (!$book) {
         return response()->json([
-            'message' => '書籍が見つかりません'
+            'message' => '書籍が存在しません'
         ], 404);
     }
 
         $book->delete();
 
-        return response()->json(null, 204);
+        return (new BookResource($book))
+        ->additional(['message' => '書籍の削除に成功しました'])
+        ->response()
+        ->setStatusCode(204);
     }
 }

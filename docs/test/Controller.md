@@ -1,21 +1,6 @@
 ※バリデーションテスト（正常系・異常系・境界）は単体テストにて検証する
 ※
 
-authTest
-//概要
-ユーザーの新規登録とログイン機能についてテスト
-
-test_register
-・GETメソッドでユーザー登録画面が表示されるか
-・POSTメソッドで情報が登録できるか
-・情報登録した後はbook.indexにリダイレクトされるか
-・新規登録されたユーザー情報がDBに登録されているか
-
-test_login
-・GETメソッドでログイン画面が表示されるか
-・POSTメソッドでログインできるか
-・ログイン後はbook.indexにリダイレクトされるか
-
 BookControllerTest
 GenreControllerTest
 ReviewControllerTest

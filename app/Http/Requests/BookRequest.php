@@ -29,7 +29,7 @@ class BookRequest extends FormRequest
                     Rule::unique('books', 'isbn')
                     ->ignore($this->book),],
             'published_date'=>['required'],
-            'description'=>['max:255'], //説明の中で数字を使う可能性を考慮し文字列のみにしない
+            'description'=>['nullable','max:255'], //説明の中で数字を使う可能性を考慮し文字列のみにしない
             'image_url',
             'genres'=>['required']
         ];

@@ -1,0 +1,28 @@
+<?php
+
+namespace Tests\Feature;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+use App\Models\User;
+
+class FavoriteControllerTest extends TestCase
+{
+    /**
+     * A basic feature test example.
+     */
+
+    use RefreshDatabase;
+    protected $seed = true;
+
+    public function test_Favorite(): void
+    {
+        $user = User::first();
+
+        $response = $this->actingAs($user)->get('/favorites');
+
+        $response->assertViewIs('favorites.index');
+        $response->assertStatus(200);
+    }
+}

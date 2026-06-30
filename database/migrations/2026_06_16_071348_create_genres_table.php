@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('genres', function (Blueprint $table) {
             $table->id();
             $table->string('name',50);
-            $table->unique(['user_id', 'book_id']);
             $table->timestamps();
         });
     }

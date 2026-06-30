@@ -33,14 +33,6 @@ Route::middleware('auth')
     });
 
 
-//review 新規登録、自分のレビュー表示
-Route::middleware('auth')
-->group(function () {
-    Route::post('/books/{book}', [ReviewController::class,'store'])->name('reviews.store');
-    Route::get('/reviews/{review}/edit',[ReviewController::class,'edit'])->name('reviews.edit');
-    });
-
-
 //favorite 
 Route::middleware('auth')
 ->group(function () {
@@ -55,9 +47,9 @@ Route::get('/books/{book}',[BookController::class,'show'])->name('books.show');
 
 //book お気に入り登録、編集
 Route::middleware('auth')->group(function () {
-    Route::post('/books/{book}/favorite', [BookController::class,'toggle'])->name('favorites.toggle');
+    Route::post('/books/{book}/favorites', [BookController::class,'toggle'])->name('favorites.toggle');
     Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
-    Route::put('/books/{book}/put',[BookController::class,'update'])->name('books.update');
+    Route::put('/books/{book}',[BookController::class,'update'])->name('books.update');
     Route::delete('/books/{book}/delete',[BookController::class,'destroy'])->name('books.destroy');
     });
 
@@ -67,15 +59,18 @@ Route::middleware('auth')
 ->group(function () {
     Route::get('/genres/{genre}', [GenreController::class, 'show'])->name('genres.show');
     Route::get('/genres/{genre}/edit', [GenreController::class,'edit'])->name('genres.edit');
-    Route::put('/books/{genre}/edit',[GenreController::class,'update'])->name('genres.update');
-    Route::delete('/books/{genre}/edit',[GenreController::class,'destroy'])->name('genres.destroy');
+    Route::put('/genres/{genre}',[GenreController::class,'update'])->name('genres.update');
+    Route::delete('/genres/{genre}',[GenreController::class,'destroy'])->name('genres.destroy');
     });
 
 
 //review いいね
 Route::middleware('auth')
 ->group(function () {
-    Route::post('/review/{review}/like', [ReviewController::class,'toggle'])->name('reviews.like');
-    Route::put('/review/{review}/update', [ReviewController::class,'update'])->name('reviews.update');
-    Route::delete('/review/{review}/delete', [ReviewController::class,'destroy'])->name('reviews.destroy');
+    Route::post('/reviews/{review}/like', [ReviewController::class,'toggle'])->name('reviews.like');
+
+    Route::post('/books/{book}/reviews', [ReviewController::class,'store'])->name('reviews.store');
+    Route::get('/reviews/{review}/edit',[ReviewController::class,'edit'])->name('reviews.edit');
+    Route::put('/reviews/{review}/', [ReviewController::class,'update'])->name('reviews.update');
+    Route::delete('/reviews/{review}/', [ReviewController::class,'destroy'])->name('reviews.destroy');
     });

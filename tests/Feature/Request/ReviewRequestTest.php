@@ -40,5 +40,7 @@ class ReviewRequestTest extends TestCase
             ->post('/genres/create', $data);
 
         $response->assertSessionHasErrors(['comment']);
-    }  
+    
+}
+
 }

@@ -25,7 +25,7 @@ class ReviewLikeSeeder extends Seeder
             $likeCount = rand(0, 3);
 
             if ($likeCount === 0) {
-            continue;
+                continue;
             }
 
             $randomUserIds = collect($userId)

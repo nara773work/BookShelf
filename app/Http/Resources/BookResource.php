@@ -36,14 +36,14 @@ class BookResource extends JsonResource
                     'user_name' => $review->user->name,
                     'rating' => $review->rating,
                     'comment' => $review->comment,
-                    'created_at' => optional($review->created_at)->format('Y-m-d H:i:s'),
-                    'updated_at' => optional($review->updated_at)->format('Y-m-d H:i:s'),
+                    'created_at' => optional($review->created_at)->format('Y-m-d'),
+                    'updated_at' => optional($review->updated_at)->format('Y-m-d'),
                 ];
             });
             }),
 
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
+            'created_at' => $this->created_at->format('Y-m-d'),
+            'updated_at' => $this->updated_at->format('Y-m-d'),
         ];
     }
 }

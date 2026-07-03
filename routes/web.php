@@ -1,14 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-
-
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\RankingController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\GenreController;
+use App\Http\Controllers\ReadingplanController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\NotificationController;
+
 
 //nonactive
 //publiced
@@ -17,6 +18,32 @@ Route::get('/ranking',[RankingController::class,'index'])->name('ranking.index')
 
 
 //authed
+//report
+Route::middleware('auth')
+->group(function () {
+    Route::get('/reports', [ReportController::class,'index'])->name('reports.index');
+});
+
+
+//reading
+Route::middleware('auth')
+->group(function () {
+    Route::get('/reading-plans', [ReadingplanController::class,'index'])->name('reading-plans.index');
+    Route::get('/reading-plans/create', [ReadingplanController::class,'create'])->name('reading-plans.create');
+    Route::post('/reading-plans', [ReadingplanController::class,'store'])->name('reading-plans.store');
+    Route::get('/reading-plans/{plan}/edit', [ReadingplanController::class,'edit'])->name('reading-plans.edit');
+    Route::post('/reading-plans/{plan}/complete', [ReadingplanController::class,'complete'])->name('reading-plans.complete');
+    Route::put('/reading-plans/{plan}', [ReadingplanController::class,'update'])->name('reading-plans.update');
+    Route::delete('/reading-plans/{plan}', [ReadingplanController::class,'destroy'])->name('reading-plans.destroy');
+});
+
+//notifications
+Route::middleware('auth')
+->group(function () {
+    Route::get('/notifications', [NotificationController::class,'index'])->name('notifications.index');
+    Route::post('/notifications/{id}/read', [NotificationController::class,'read'])->name('notifications.read');
+});
+
 //book　新規登録
 Route::middleware('auth')->group(function () {
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
@@ -74,3 +101,4 @@ Route::middleware('auth')
     Route::put('/reviews/{review}/', [ReviewController::class,'update'])->name('reviews.update');
     Route::delete('/reviews/{review}/', [ReviewController::class,'destroy'])->name('reviews.destroy');
     });
+

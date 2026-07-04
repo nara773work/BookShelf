@@ -28,3 +28,16 @@ id,user_id(cascade,外部キー),book_id(cascade,外部キー),
 target_date(期日),created_at・updated_at(timestmp)
 users->readinPlans 1対多
 books->readingplans 1対多
+
+//シーダー
+山田太郎のみ作成
+book_id = 1,期日:10日後,状態:読書中(青)
+book_id = 2,期日:4日後,状態:読了(緑)
+book_id = 3,期日:4日後,状態:読了(緑)
+book_id = 4,期日:昨日,状態:期限切れ(赤)
+
+//ReadingPlanRequest
+書籍:requierd 書籍を選択してください
+期日:required 期日を選択してください
+　　after_or_equal:today 本日以降を選択してください
+

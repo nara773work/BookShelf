@@ -113,8 +113,16 @@ class BookController extends Controller
     }
 
     public function destroy(Book $book,Request $request){
-        $this->authorize('update', $book);
+        $this->authorize('delete', $book);
 
+        $book->delete();
+        
+        return redirect()
+        ->route('books.index')
+        ->with('success', '書籍を削除しました'); 
+    }
+
+    public function isbn(Book $book,Request $request){
         $book->delete();
         
         return redirect()

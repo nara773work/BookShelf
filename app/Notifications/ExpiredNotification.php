@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BookDeadlineNotification extends Notification
+class ExpiredNotification extends Notification
 {
     use Queueable;
 
@@ -35,7 +35,9 @@ class BookDeadlineNotification extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'data' => $this->book->title . 'の期日が残り3日になりました',
+            'type' => 'Expired',
+            'title' =>'期限切れ',
+            'body' =>'『'. $this->book->title .'』'. 'の期日が過ぎました',
             'book_id' => $this->book->id,
         ];
     }

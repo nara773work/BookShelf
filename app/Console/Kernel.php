@@ -12,7 +12,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-         $schedule->command('books:check-deadlines')->daily();
+        $schedule->command('books:expired')->daily();
+        $schedule->command('books:reminder')->daily();
     }
 
     /**

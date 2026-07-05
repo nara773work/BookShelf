@@ -32,7 +32,7 @@ class Reminder extends Command
         $limit = Carbon::today()->addDays(3);
 
         $plans = ReadingPlan::whereBetween('target_date', [$today, $limit])
-        ->where('status', 'active')
+        ->where('status', 'Reading')
         ->get();
 
         foreach ($plans as $plan) {

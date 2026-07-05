@@ -1,4 +1,8 @@
-単体テスト
+BookRequest
+GenreRequest
+ReadingRequest
+ReviewRequest
+
 ・バリデーションテスト
 　必須項目未入力、最大値超過、一意性の担保
 

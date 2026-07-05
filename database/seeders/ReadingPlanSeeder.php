@@ -5,10 +5,10 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\Plan;
+use App\Models\ReadingPlan;
 use App\Enums\ReadingPlanStatus;
 use Carbon\Carbon;
-class PlanSeeder extends Seeder
+class ReadingPlanSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,33 +17,33 @@ class PlanSeeder extends Seeder
     {
         $user = User::first();
 
-        Plan::create([
+        ReadingPlan::create([
             'user_id' => $user->id,
             'book_id' => 1,
             'status' => ReadingPlanStatus::Reading->value,
-            'target_date' => Carbon::today()->addDays(10),
+            'target_date' => Carbon::today()->addDays(3), //通知来る
         ]); 
 
-        Plan::create([
+        ReadingPlan::create([
             'user_id' => $user->id,
             'book_id' => 2,
-            'status' => ReadingPlanStatus::Completed->value,
-            'target_date' => Carbon::today()->addDays(4),
-        ]);
+            'status' => ReadingPlanStatus::Reading->value,
+            'target_date' => Carbon::today()->addDays(5), //通知来ない
+        ]); 
 
-        Plan::create([
+        ReadingPlan::create([
             'user_id' => $user->id,
             'book_id' => 3,
             'status' => ReadingPlanStatus::Completed->value,
-            'target_date' => Carbon::today()->addDays(4),
+            'target_date' => Carbon::today()->addDays(3),
         ]);
 
         
-        Plan::create([
+        ReadingPlan::create([
             'user_id' => $user->id,
             'book_id' => 4,
             'status' => ReadingPlanStatus::Expired->value,
-            'target_date' => Carbon::yesterday(),
+            'target_date' => Carbon::yesterday(), //通知来る
         ]); 
     }
 }

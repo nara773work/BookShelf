@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Policies;
-use App\Models\Plan;
+use App\Models\ReadingPlan;
 use App\Models\User;
 
 class PlanPolicy

@@ -32,7 +32,7 @@ class Expired extends Command
         $today = Carbon::today();
 
         $plans = ReadingPlan::whereDate('target_date', '<', $today)
-        ->where('status', 'active')
+        ->where('status', 'expired')
         ->get();
 
         foreach ($plans as $plan) {

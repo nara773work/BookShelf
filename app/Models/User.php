@@ -59,8 +59,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Review::class, 'review_likes', 'user_id', 'review_id');
     }
-    public function Plans()
+    public function ReadingPlans()
     {
-        return $this->hasMany(Plan::class, 'user_id');
+        return $this->hasMany(ReadingPlan::class, 'user_id');
     }
 }

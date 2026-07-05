@@ -7,6 +7,7 @@ use App\Models\Book;
 use App\Models\Review;
 use App\Models\Genre;
 use App\Http\Requests\BookRequest;
+use Illuminate\Support\Facades\Http;
 
 class BookController extends Controller
 {
@@ -122,12 +123,34 @@ class BookController extends Controller
         ->with('success', '書籍を削除しました'); 
     }
 
-    public function isbn(Book $book,Request $request){
-        $book->delete();
-        
-        return redirect()
-        ->route('books.index')
-        ->with('success', '書籍を削除しました'); 
+    public function isbn(BookRequest $request){
+    $isbn = preg_replace('/[^0-9]', '', $request->isbn);
+dd($isbn);
+    $response = Http::timeout(5)->get(
+        'https://www.googleapis.com/books/v1/volumes',
+        [
+            'q' => 'isbn:' . $isbn
+        ]
+    );
+
+    $data = $response->json();
+
+    if (empty($data['items'][0]['volumeInfo'])) {
+        return response()->json([
+            'error' => '該当する書籍が見つかりませんでした'
+        ], 404);
+    }
+
+    $book = $data['items'][0]['volumeInfo'];
+
+    return response()->json([
+        'title' => $book['title'] ,
+        'author' => $book['authors'][0] ,
+        'isbn' => $book['isbn'][0] ?? '',
+        'published_date' => $book['publishedDate'] ,
+        'description' => $book['description'] ,
+    ]);
+    
     }
 
 }

@@ -1,6 +1,3 @@
-※バリデーションテスト（正常系・異常系・境界）は単体テストにて検証する
-※
-
 BookControllerTest
 GenreControllerTest
 ReviewControllerTest

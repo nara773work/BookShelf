@@ -45,7 +45,7 @@ Route::middleware('auth')
 });
 
 //ISBN 
-Route::get('/books/isbn/{isbn}', [BookController::class,'isbn'])->name('books.isbn');
+Route::get('/books/isbn/{isbn}', [BookController::class,'isbn']);
 
 //book　新規登録
 Route::middleware('auth')->group(function () {

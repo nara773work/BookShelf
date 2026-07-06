@@ -19,3 +19,4 @@ trait CreatesApplication
         return $app;
     }
 }
+//内部的な処理について

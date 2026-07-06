@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\Genre;
 use App\Models\User;
+use App\Models\Book;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ReviewRequestTest extends TestCase
@@ -15,13 +16,13 @@ class ReviewRequestTest extends TestCase
     public function test_required_validation_errors(): void
     {
         $user = User::first();
-
+        $book = Book::first();
         $data = [
             'rating' => '',
         ];
 
         $response = $this->actingAs($user)
-            ->post('/reviews/create', $data);
+            ->post("/books/{$book->id}/reviews", $data);
 
         $response->assertSessionHasErrors(['rating']);
     }
@@ -29,7 +30,7 @@ class ReviewRequestTest extends TestCase
     public function test_max_length_validation(): void
     {
         $user = User::first();
-
+        $book = Book::first();
         // comment 256文字
         $data = [
             'rating' => 3,
@@ -37,7 +38,7 @@ class ReviewRequestTest extends TestCase
         ];
 
         $response = $this->actingAs($user)
-            ->post('/genres/create', $data);
+            ->post("/books/{$book->id}/reviews", $data);
 
         $response->assertSessionHasErrors(['comment']);
     

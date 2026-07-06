@@ -123,33 +123,37 @@ class BookController extends Controller
         ->with('success', '書籍を削除しました'); 
     }
 
-    public function isbn(BookRequest $request){
-    $isbn = preg_replace('/[^0-9]', '', $request->isbn);
-dd($isbn);
-    $response = Http::timeout(5)->get(
-        'https://www.googleapis.com/books/v1/volumes',
+    public function isbn(Request $request){
+        $isbn = $request->isbn;
+
+        /*$response = Http::timeout(10)
+        ->get('https://www.googleapis.com/books/v1/volumes',
         [
-            'q' => 'isbn:' . $isbn
-        ]
-    );
+            'q' => 'isbn:' . $request->isbn,
+        ]);
 
-    $data = $response->json();
+        ($response->failed()) {
+            return response()->json([
+                'error' => '通信失敗',
+                'details' => $response->toException()->getMessage() // 具体的なエラー内容を表示
+            ], 500);
+        }
 
-    if (empty($data['items'][0]['volumeInfo'])) {
+        $data = $response->json();
+
+        if (!isset($data['items']) || count($data['items']) === 0) {
+        return response()->json(['error' => '該当するISBNの書籍が見つかりませんでした。'], 404);
+        }
+
+        $book = $data['items'][0]['volumeInfo'];*/
+
         return response()->json([
-            'error' => '該当する書籍が見つかりませんでした'
-        ], 404);
-    }
-
-    $book = $data['items'][0]['volumeInfo'];
-
-    return response()->json([
-        'title' => $book['title'] ,
-        'author' => $book['authors'][0] ,
-        'isbn' => $book['isbn'][0] ?? '',
-        'published_date' => $book['publishedDate'] ,
-        'description' => $book['description'] ,
-    ]);
+            'title' => 'テスト',
+            'author' => 'テスト',
+            'isbn' => $isbn,
+            'published_date' => '2027-07-06',
+            'description' => 'これはAPI制限を回避するためのテストデータです。',
+        ]);
     
     }
 

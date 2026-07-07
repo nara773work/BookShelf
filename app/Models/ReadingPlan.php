@@ -10,7 +10,7 @@ class ReadingPlan extends Model
     use HasFactory;
     protected $fillable = 
     [
-        'user_id','book_id','target_date','status'
+        'user_id','book_id','target_date','status', 'reminded_at',
     ];
 
     protected $casts = [

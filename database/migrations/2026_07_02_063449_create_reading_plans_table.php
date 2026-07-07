@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('book_id')->constrained()->onDelete('cascade');
             $table->string('status');
+            $table->date('reminded_at')->nullable();
             $table->date('target_date');
             $table->timestamps();
         });

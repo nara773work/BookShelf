@@ -5,6 +5,8 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use App\Models\ReadingPlan;
 use App\Notifications\ReminderNotification;
+use App\Enums\ReadingPlanStatus;
+
 class Reminder extends Command
 {
     /**
@@ -32,7 +34,7 @@ class Reminder extends Command
         $limit = Carbon::today()->addDays(3);
 
         $plans = ReadingPlan::whereBetween('target_date', [$today, $limit])
-        ->where('status', 'Reading')
+        ->where('status', ReadingPlanStatus::Reading->value)
         ->get();
 
         foreach ($plans as $plan) {

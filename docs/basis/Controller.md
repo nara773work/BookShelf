@@ -42,6 +42,7 @@ test_toggle（認証必須）
 ・DBのfavoritebooksテーブル（お気に入り）,review_Likes（いいね）テーブルにも紐づける
 ・2回押すとDBのそれぞれのテーブルから削除される
 
+
 FavoriteControllerTest
 RankingControllerTest
 //概要
@@ -50,6 +51,7 @@ RankingControllerTest
 test_Controller名（認証必須）
 ・GETメソッドで「ranking」,「favorites」ページを表示する
 ・表示しているビューがranking.index(ランキング),favorites.index(お気に入り)である
+
 
 ApiBookControllerTest
 //概要

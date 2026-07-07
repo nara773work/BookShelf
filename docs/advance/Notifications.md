@@ -2,7 +2,7 @@ Notifications
 //概要
 通知一覧を表示、既読操作ができる
 
-Enums/ReadingPlanStatus
+app/Enums/ReadingPlanStatus
 //概要
 ステータスを設定する
 読書中、読了、期限切れ（期日が今日を過ぎたら期限切れになる）
@@ -15,7 +15,7 @@ json('data');
 timestamp('read_at')->nullable();
 timestamps();
 
-ExiredNotifications,ReminderNotifications
+app/notifications/ExiredNotifications,ReminderNotifications
 //概要
 通知の中身を設定する
 

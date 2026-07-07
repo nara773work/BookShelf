@@ -21,10 +21,15 @@ class ReadingPlanRequest extends FormRequest
      */
     public function rules(): array
     {
+         if ($this->isMethod('post')) {
         return [
             'book_id' => ['required'],
-            'target_date'=> ['required','after_or_equal:today']
+            'target_date' => ['required','after_or_equal:today'],
         ];
+    };
+     return [
+        'target_date' => ['required','after_or_equal:today'],
+    ];
     }
 
     public function messages(): array

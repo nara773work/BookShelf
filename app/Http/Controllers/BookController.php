@@ -123,38 +123,37 @@ class BookController extends Controller
         ->with('success', '書籍を削除しました'); 
     }
 
-    public function isbn(Request $request){
-        $isbn = $request->isbn;
+    public function isbn(Request $request)
+{
+    $isbn = $request->isbn;
 
-        /*$response = Http::timeout(10)
-        ->get('https://www.googleapis.com/books/v1/volumes',
-        [
-            'q' => 'isbn:' . $request->isbn,
+    $response = Http::timeout(10)
+        ->get('https://www.googleapis.com/books/v1/volumes', [
+            'q' => 'isbn:' . $isbn,
         ]);
 
-        ($response->failed()) {
-            return response()->json([
-                'error' => '通信失敗',
-                'details' => $response->toException()->getMessage() // 具体的なエラー内容を表示
-            ], 500);
-        }
+    $data = $response->json();
 
-        $data = $response->json();
-
-        if (!isset($data['items']) || count($data['items']) === 0) {
-        return response()->json(['error' => '該当するISBNの書籍が見つかりませんでした。'], 404);
-        }
-
-        $book = $data['items'][0]['volumeInfo'];*/
+    // 書籍データが存在するかチェック
+    if (isset($data['items']) && !empty($data['items'])) {
+        $info = $data['items'][0]['volumeInfo'];
 
         return response()->json([
-            'title' => 'テスト',
-            'author' => 'テスト',
-            'isbn' => $isbn,
-            'published_date' => '2027-07-06',
-            'description' => 'これはAPI制限を回避するためのテストデータです。',
+            'title'          => $info['title'] ?? '',
+            'author'         => isset($info['authors']) ? implode(', ', $info['authors']) : '',
+            'description'    => $info['description'] ?? '',
+            // JavaScriptで image_url を参照しているため、ここに画像URLを追加します
+            'image_url'      => $info['imageLinks']['thumbnail'] ?? '',
+            'published_date' => $info['publishedDate'] ?? null,
         ]);
+    }
+
+    // エラー時は 'error' キーで返すことで、JS側の if (data.error) にヒットさせます
+    return response()->json([
+        'error' => 'エラー'
+    ], 404);
+}
     
     }
 
-}
+

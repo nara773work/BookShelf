@@ -4,14 +4,14 @@ namespace App\Policies;
 use App\Models\ReadingPlan;
 use App\Models\User;
 
-class PlanPolicy
+class ReadingPlanPolicy
 {
     /**
      * Create a new policy instance.
      */
-    public function view(User $user,Plan $plan): bool
+    public function view(User $user,ReadingPlan $readingPlans): bool
     {
-       return $user->id === $plan->user_id;
+       return $user->id === $readingPlans->user_id;
     }
 
     /**
@@ -19,22 +19,22 @@ class PlanPolicy
      */
     public function create(User $user): bool
     {
-        return $user->id === $plan->user_id;
+        return true;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Plan $plan): bool
+    public function update(User $user, ReadingPlan $readingPlans): bool
     {
-        return $user->id === $plan->user_id;
+        return $user->id === $readingPlans->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Plan $plan): bool
+    public function delete(User $user, ReadingPlan $readingPlan): bool
     {
-        return $user->id === $plan->user_id;
+        return $user->id === $readingPlan->user_id;
     }
 }

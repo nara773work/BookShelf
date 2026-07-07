@@ -14,7 +14,7 @@ class ReadingPlanController extends Controller
         $currentStatus = $request->status;
 
         $readingPlans =auth()->user()
-        ->ReadingPlans()
+        ->readingPlans()
         ->when($currentStatus, function ($query) use ($currentStatus) {
             $query->where('status', $currentStatus);
         })
@@ -30,8 +30,8 @@ class ReadingPlanController extends Controller
         return view('reading-plans.create',compact('books'));
     }
 
-    public function store(ReadingPlanRequest $request,ReadingPlan $plan){
-        $book = ReadingPlan::create([
+    public function store(ReadingPlanRequest $request){
+        $readingPlan = ReadingPlan::create([
             'user_id'=>auth()->id(),
             'book_id'=>$request->book_id,
             'target_date'=>$request->target_date, 
@@ -43,9 +43,8 @@ class ReadingPlanController extends Controller
         ->with('success', '読書計画を作成しました');
     }
 
-    public function complete(ReadingRequest $request,ReadingPlan $plan){
+    public function complete(ReadingPlan $plan){
         $this->authorize('update', $plan);
-
         $plan->update([
             'status'=> ReadingPlanStatus::Completed->value,
         ]);
@@ -54,14 +53,21 @@ class ReadingPlanController extends Controller
         ->with('success', 'この書籍のステータスを読了に変更しました');
     }
 
-    public function edit(ReadingPlanRequest $request,ReadingPlan $plan){
+    public function edit(ReadingPlan $plan){
+       
         $this->authorize('update', $plan);
+         
+        $readingPlan = $plan;
+
         return view('reading-plans.edit',compact('readingPlan'));
     }
 
     public function update(ReadingPlanRequest $request,ReadingPlan $plan){
+
         $this->authorize('update', $plan);
+        
         $plan->update([
+
             'target_date'=>$request->target_date,
         ]);
 
@@ -72,8 +78,9 @@ class ReadingPlanController extends Controller
     public function destroy(ReadingPlan $plan){
         $this->authorize('delete', $plan);
         $plan->delete();
+
         return redirect()->route('reading-plans.index')
-        ->with('error', '読書計画を削除しました');
+        ->with('success', '読書計画を削除しました');
     }
     
 }

@@ -102,8 +102,9 @@ class BookControllerTest extends TestCase
 
     public function test_Book_edit(): void
     {
+        
         $user = User::first();
-        $book = Book::first();
+        $book = Book::where('user_id',1)->first();
 
         $response = $this->actingAs($user)
         ->get("/books/{$book->id}/edit");
@@ -115,7 +116,7 @@ class BookControllerTest extends TestCase
     public function test_Book_update(): void
     {
         $user = User::first();
-        $book = Book::first();
+        $book = Book::where('user_id',1)->first();
 
         $update_book = ([
             'title' => 'edited',
@@ -137,13 +138,13 @@ class BookControllerTest extends TestCase
     public function test_Book_delete(): void
     {
         $user = User::first();
-        $book = Book::first();
+        $book = Book::where('user_id',1)->first();
     
         $response = $this->actingAs($user)
         ->delete("/books/{$book->id}/delete");
 
         $response->assertRedirect('/books');
 
-        $this->assertDatabaseMissing('books', ['id' => 1]);
+        $this->assertDatabaseMissing('books', ['id' => $book->id]);
     }
 }

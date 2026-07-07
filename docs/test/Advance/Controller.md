@@ -1,5 +1,0 @@
-ReadingPlanController
-ReportController
-Ntificationscontrollrer
-//概要
-各Controllerに記載されている機能をテストする

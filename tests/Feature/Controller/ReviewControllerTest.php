@@ -40,6 +40,19 @@ class ReviewControllerTest extends TestCase
             'book_id' => $book->id]);
     }
 
+    public function test_Review_store_redirect(): void{
+        $book = Book::first();
+        $review = [
+            'rating' => 3,
+            'comment' => 'test',
+            'book_id' => $book->id
+        ];
+
+        $response = $this
+        ->post("/books/{$book->id}/reviews",$review);
+        $response->assertRedirect("/login");
+    }
+
     public function test_toggle(): void
     {
         $review = Review::first();
@@ -68,6 +81,13 @@ class ReviewControllerTest extends TestCase
     
     }
 
+    public function test_toggle_redirect(): void{
+        $review = Review::first();
+
+        $response = $this->post("/reviews/{$review->id}/like");
+        $response->assertRedirect('/login');
+    }
+
     public function test_Review_edit(): void
     {
         $review = Review::first();
@@ -75,6 +95,9 @@ class ReviewControllerTest extends TestCase
 
         $response = $this->actingAs($user)
         ->get("/reviews/{$review->id}/edit");
+
+        $response->assertSee($review->rating);
+        $response->assertSee($review->comment);
 
         $response->assertStatus(200);
         $response->assertViewIs('reviews.edit');
@@ -106,7 +129,7 @@ class ReviewControllerTest extends TestCase
 
     public function test_Review_delete(): void
     {
-        $review = Review::first();
+        $review = Review::with('likedByUsers')->first();
         $user = $review->user;
         $book = $review->book;
        
@@ -116,5 +139,6 @@ class ReviewControllerTest extends TestCase
         $response->assertRedirect("/books/{$book->id}");
 
         $this->assertDatabaseMissing('reviews', ['id' => $review->id]);
+        $this->assertDatabaseMissing('review_likes', ['review_id' => $review->id]);
     }
 }

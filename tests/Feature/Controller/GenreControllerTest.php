@@ -98,6 +98,7 @@ class GenreControllerTest extends TestCase
     }
 
     public function test_Genre_edit_ridirect(): void{
+        $genre = Genre::first();
         $response = $this->get("/genres/{$genre->id}/edit");
         $response->assertRedirect('/login');
     }

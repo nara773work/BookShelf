@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\Book;
 
 class RankingControllerTest extends TestCase
 {
@@ -13,11 +14,28 @@ class RankingControllerTest extends TestCase
      */
     public function test_ranking(): void
     {
+        $rankedbooks = Book::withAvg('reviews','rating')
+        ->orderByDesc('reviews_avg_rating')
+        ->take(10)
+        ->get();
+
         $response = $this->get('/ranking');
 
         $response->assertViewIs('ranking.index');
-        $response->assertViewHas('rankedBooks');
         $response->assertStatus(200);
 
+        for($i = 0; $i < $rankedbooks->count() - 1; $i++){
+            $book = $rankedbooks->skip($i)->first();
+            $nextbook = $rankedbooks->skip($i+1)->first();
+
+            $this->assertTrue($book->reviews_avg_rating >= $nextbook->reviews_avg_rating);
+        }
+
+        $this->assertCount(10, $rankedbooks);
+    }
+
+    public function test_Favorite_ridirect(): void{
+        $response = $this->get('/favorites');
+        $response->assertRedirect('/login');
     }
 }

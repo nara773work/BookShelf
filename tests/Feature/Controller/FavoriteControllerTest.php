@@ -18,11 +18,20 @@ class FavoriteControllerTest extends TestCase
 
     public function test_Favorite(): void
     {
-        $user = User::first();
+        $user = User::with('favoritebooks')->first();
+        $favorite_books = $user->favoritebooks->first();
 
         $response = $this->actingAs($user)->get('/favorites');
 
         $response->assertViewIs('favorites.index');
         $response->assertStatus(200);
+
+        $response->assertSee($favorite_books->title);
+        $response->assertSee($favorite_books->author);
+    }
+
+    public function test_Favorite_ridirect(): void{
+        $response = $this->get('/favorites');
+        $response->assertRedirect('/login');
     }
 }

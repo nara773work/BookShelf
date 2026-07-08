@@ -12,7 +12,7 @@ class ReportControllerTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function test_index(): void
+    public function test_report_index(): void
     {
         $user = User::first();
         $response = $this->actingAs($user)

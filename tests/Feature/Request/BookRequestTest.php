@@ -25,7 +25,7 @@ class BookRequestTest extends TestCase
         ];
 
         $response = $this->actingAs($user)
-            ->post('/books/create', $data);
+            ->post('/books', $data);
 
         $response->assertSessionHasErrors([
             'title',
@@ -51,7 +51,7 @@ class BookRequestTest extends TestCase
         ];
 
         $response = $this->actingAs($user)
-            ->post('/books/create', $data);
+            ->post('/books', $data);
 
         $response->assertSessionHasErrors(['title']);
 
@@ -60,7 +60,7 @@ class BookRequestTest extends TestCase
         $data['author'] = str_repeat('a', 101);
 
         $response = $this->actingAs($user)
-            ->post('/books/create', $data);
+            ->post('/books', $data);
 
         $response->assertSessionHasErrors(['author']);
     }
@@ -80,7 +80,7 @@ class BookRequestTest extends TestCase
         ];
 
         $response = $this->actingAs($user)
-            ->post('/books/create', $data);
+            ->post('/books', $data);
 
         $response->assertSessionHasErrors(['isbn']);
 
@@ -88,7 +88,7 @@ class BookRequestTest extends TestCase
         $data['isbn'] = str_repeat('1', 14);
 
         $response = $this->actingAs($user)
-            ->post('/books/create', $data);
+            ->post('/books', $data);
 
         $response->assertSessionHasErrors(['isbn']);
     }
@@ -109,7 +109,7 @@ class BookRequestTest extends TestCase
         ];
 
         $response = $this->actingAs($user)
-            ->post('/books/create', $data);
+            ->post('/books', $data);
 
         $response->assertSessionHasNoErrors();
 
@@ -117,7 +117,7 @@ class BookRequestTest extends TestCase
         $data['description'] = str_repeat('a', 256);
 
         $response = $this->actingAs($user)
-            ->post('/books/create', $data);
+            ->post('/books', $data);
 
         $response->assertSessionHasErrors(['description']);
     }

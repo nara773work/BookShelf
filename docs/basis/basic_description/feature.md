@@ -1,4 +1,6 @@
-機能テスト controller.md,Request.md
+機能テスト
+
+controller.md
 　Auth
 　BookController
 　ReviewController
@@ -29,6 +31,7 @@
 ・認証テスト
 　許可された人以外はその操作ができないか
 
+Request.md
 ・バリデーションテスト
 　バリデーションが正常に働いているか、異常な値ははじかれるか
 　フラッシュメッセージが表示されるか

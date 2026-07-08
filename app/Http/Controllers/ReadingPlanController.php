@@ -5,6 +5,7 @@ use App\Enums\ReadingPlanStatus;
 use Illuminate\Http\Request;
 use App\Models\ReadingPlan;
 use App\Models\Book;
+use Carbon\Carbon;
 use App\Http\Requests\ReadingPlanRequest;
 
 class ReadingPlanController extends Controller
@@ -65,11 +66,19 @@ class ReadingPlanController extends Controller
     public function update(ReadingPlanRequest $request,ReadingPlan $plan){
 
         $this->authorize('update', $plan);
-        
+        $today = Carbon::today();
+
         $plan->update([
 
             'target_date'=>$request->target_date,
         ]);
+
+        if($plans = ReadingPlan::whereDate('target_date', '<', $today)){
+            $plan->update([
+
+            'status'=> ReadingPlanStatus::Expired,
+        ]);
+        }
 
         return redirect()->route('reading-plans.index')
         ->with('success', '読書計画を更新しました');

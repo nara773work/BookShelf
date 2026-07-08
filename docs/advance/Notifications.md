@@ -53,4 +53,5 @@ sail artisan books:reminder
 # For more information see the manual pages of crontab(5) and cron(8)
 #
 # m h  dom mon dow   command
-* * * * * cd /home/nanami/BookShelf/bookshelf-app && php artisan schedule:run >> /dev/null 2>&1
+* * * * * cd /home/nanami/BookShelf/bookshelf-app && vendor/bin/sail artisan schedule:run >> /dev/null 2>&1
+

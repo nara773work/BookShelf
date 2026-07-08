@@ -28,16 +28,22 @@ class ReadingPlanRequest extends FormRequest
         ];
     };
      return [
-        'target_date' => ['required','after_or_equal:today'],
+        'target_date' => ['required',],
     ];
     }
 
     public function messages(): array
     {
+        if ($this->isMethod('post')) {
         return [
             'book_id.required' => '書籍を選択してください',
             'target_date.required'=>'期日を選択してください',
             'target_date.after_or_equal'=>'本日以降の日付を選択してください'
+        ];
+        };
+        return [
+            'book_id.required' => '書籍を選択してください',
+            'target_date.required'=>'期日を選択してください',
         ];
     }
 }

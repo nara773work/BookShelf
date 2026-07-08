@@ -16,7 +16,7 @@ class ReadingplanControllerTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function test_index(): void
+    public function test_ReadingPlan_index(): void
     {
         $user = User::first();
 
@@ -28,7 +28,7 @@ class ReadingplanControllerTest extends TestCase
         $response->assertViewIs('reading-plans.index');
     }
 
-    public function test_complete(): void
+    public function test_ReadingPlan_complete(): void
     {
         $user = User::first();
         $plan = ReadingPlan::first();
@@ -40,7 +40,7 @@ class ReadingplanControllerTest extends TestCase
         $response->assertRedirect('/reading-plans');
     }
 
-    public function test_create(): void
+    public function test_ReadingPlan_create(): void
     {
         $user = User::first();
 
@@ -52,7 +52,7 @@ class ReadingplanControllerTest extends TestCase
         $response->assertViewIs('reading-plans.create');
     }
 
-    public function test_store(): void
+    public function test_ReadingPlan_store(): void
     {
         $user = User::first();
         $book = Book::where('user_id',1)->first();
@@ -77,7 +77,7 @@ class ReadingplanControllerTest extends TestCase
             'status' => ReadingPlanStatus::Reading->value,]);
     }
 
-    public function test_edit(): void
+    public function test_ReadingPlan_edit(): void
     {
         $user = User::first();
         $plan = ReadingPlan::where('user_id', $user->id)->first();
@@ -89,7 +89,7 @@ class ReadingplanControllerTest extends TestCase
         $response->assertViewIs('reading-plans.edit');
     }
 
-    public function test_update(): void
+    public function test_ReadingPlan_update(): void
     {
         $user = User::first();
         $readingPlan = ReadingPlan::where('user_id', $user->id)->first();
@@ -111,7 +111,7 @@ class ReadingplanControllerTest extends TestCase
         
     }
 
-    public function test_delete(): void
+    public function test_ReadingPlan_delete(): void
     {
         $user = User::first();
         $plan = ReadingPlan::where('user_id', $user->id)->first();

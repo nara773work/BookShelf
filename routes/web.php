@@ -50,7 +50,7 @@ Route::get('/books/isbn/{isbn}', [BookController::class,'isbn']);
 //book　新規登録
 Route::middleware('auth')->group(function () {
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
-    Route::post('/books/create',[BookController::class,'store'])->name('books.store');
+    Route::post('/books',[BookController::class,'store'])->name('books.store');
     });
 
 
@@ -80,7 +80,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/books/{book}/favorites', [BookController::class,'toggle'])->name('favorites.toggle');
     Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
     Route::put('/books/{book}',[BookController::class,'update'])->name('books.update');
-    Route::delete('/books/{book}/delete',[BookController::class,'destroy'])->name('books.destroy');
+    Route::delete('/books/{book}',[BookController::class,'destroy'])->name('books.destroy');
     });
 
 

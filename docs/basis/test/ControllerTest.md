@@ -1,4 +1,4 @@
-BookControllerTest
+
 GenreControllerTest
 ReviewControllerTest
 //概要
@@ -7,6 +7,7 @@ ReviewControllerTest
 test_コントローラー名_index（Book,Genreのみ）(Genreは認証必須)
 ・GETメソッドで一覧ページを表示する　
 ・表示しているビューが「コントローラー名.index」である
+・
 
 test_コントローラー名_show（Book,Genreのみ）(Genreは認証必須)
 ・GETメソッドで詳細ページを表示する　

@@ -21,7 +21,7 @@ class GenreRequestTest extends TestCase
         ];
 
         $response = $this->actingAs($user)
-            ->post('/genres/create', $data);
+            ->post('/genres', $data);
 
         $response->assertSessionHasErrors(['name']);
     }
@@ -36,7 +36,7 @@ class GenreRequestTest extends TestCase
         ];
 
         $response = $this->actingAs($user)
-            ->post('/genres/create', $data);
+            ->post('/genres', $data);
 
         $response->assertSessionHasErrors(['name']);
     }  

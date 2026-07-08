@@ -20,19 +20,34 @@ class GenreControllerTest extends TestCase
     public function test_Genre_index(): void
     {
         $user = User::first();
+        $genres = Genre::withCount('books')->first();
+        $books = $genres->books_count;
+
         $response = $this->actingAs($user)->get('/genres');
         $response->assertStatus(200);
+
+        $response->assertSee($genres->name);
+        $response->assertSee($books);
         $response->assertViewIs('genres.index');
+    }
+
+    public function test_Genre_index_ridirect(): void{
+        $response = $this->get('/genres');
+        $response->assertRedirect('/login');
     }
 
     public function test_Genre_show(): void
     {
         $user = User::first();
-        $genre = Genre::first();
+        $genre = Genre::with('books')->first();
+        $books = $genre->books->first();
 
         $response = $this->actingAs($user)->get("/genres/{$genre->id}");
         $response->assertStatus(200);
         $response->assertViewIs('genres.show');
+        $response->assertSee($genre->name);
+        $response->assertSee($books->title);
+        $response->assertSee($books->author);
     }
 
     public function test_Genre_create(): void
@@ -42,6 +57,13 @@ class GenreControllerTest extends TestCase
         $response = $this->actingAs($user)->get("/genres/create");
         $response->assertStatus(200);
         $response->assertViewIs('genres.create');
+
+        $response->assertSee('ジャンル名');
+    }
+
+    public function test_Genre_create_redirect(): void{
+        $response = $this->get('/genres/create');
+        $response->assertRedirect('/login');
     }
 
     public function test_Genre_store(): void
@@ -52,7 +74,7 @@ class GenreControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)
-        ->post("/genres/create",$genre);
+        ->post("/genres",$genre);
 
         $response->assertRedirect('/genres');
         $response->assertStatus(302);
@@ -70,6 +92,14 @@ class GenreControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('genres.edit');
+
+        $response->assertSee($genre->name);
+        $response->assertSee($genre->comment);
+    }
+
+    public function test_Genre_edit_ridirect(): void{
+        $response = $this->get("/genres/{$genre->id}/edit");
+        $response->assertRedirect('/login');
     }
 
     public function test_Genre_update(): void

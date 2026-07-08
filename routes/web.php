@@ -59,7 +59,7 @@ Route::middleware('auth')
 ->group(function () {
     Route::get('/genres', [GenreController::class, 'index'])->name('genres.index');
     Route::get('/genres/create', [GenreController::class, 'create'])->name('genres.create');
-    Route::post('/genres/create', [GenreController::class, 'store'])->name('genres.store');
+    Route::post('/genres', [GenreController::class, 'store'])->name('genres.store');
     });
 
 

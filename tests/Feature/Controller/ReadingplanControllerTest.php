@@ -26,23 +26,49 @@ class ReadingplanControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('reading-plans.index');
+
+    }
+
+    public function test_ReadingPlan_index_fillter(): void{
+        $user = User::first();
+
+        $response = $this
+        ->actingAs($user)
+        ->get('/reading-plans?status=reading');
+
+        $plans = $response->viewData('readingPlans');
+
+        $response->assertSee('読書中');
+        
+        foreach ($plans as $plan) {
+            $this->assertEquals(
+            ReadingPlanStatus::Reading->value,
+            $plan->status->value
+    );
+    }
     }
 
     public function test_ReadingPlan_complete(): void
     {
         $user = User::first();
-        $plan = ReadingPlan::first();
+        $plan = ReadingPlan::where('status',ReadingPlanStatus::Reading->value)->first();
 
         $response = $this
         ->actingAs($user)
         ->post("/reading-plans/{$plan->id}/complete");
 
         $response->assertRedirect('/reading-plans');
+
+        $this->assertDatabaseHas('reading_plans', [
+            'id' => $plan->id,    
+            'status' => ReadingPlanStatus::Completed->value
+            ]);
     }
 
     public function test_ReadingPlan_create(): void
     {
         $user = User::first();
+        $book = Book::first();
 
         $response = $this
         ->actingAs($user)
@@ -50,6 +76,8 @@ class ReadingplanControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('reading-plans.create');
+
+        $response->assertSee($book->title);
     }
 
     public function test_ReadingPlan_store(): void
@@ -87,6 +115,10 @@ class ReadingplanControllerTest extends TestCase
         ->get("/reading-plans/{$plan->id}/edit");
 
         $response->assertViewIs('reading-plans.edit');
+
+        $response->assertSee(
+            $plan->target_date->format('Y-m-d')
+        );
     }
 
     public function test_ReadingPlan_update(): void
@@ -118,6 +150,10 @@ class ReadingplanControllerTest extends TestCase
 
         $response = $this->actingAs($user)->delete("/reading-plans/{$plan->id}");
         $response->assertRedirect('/reading-plans');
+
+        $this->assertDatabaseMissing('reading_plans', [
+            'id' => $plan->id
+        ]);
         
     }
 }

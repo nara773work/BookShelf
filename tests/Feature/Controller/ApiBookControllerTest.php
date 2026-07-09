@@ -18,14 +18,74 @@ class ApiBookControllerTest extends TestCase
     {
         $response = $this->get('/api/v1/books');
         $response->assertStatus(200);
+
+        $response->assertJsonFragment([
+            'message' => '書籍一覧の取得に成功しました',
+        ]);
+
+        $response->assertJsonStructure([
+        'message',
+        'data' => [
+            '*' => [
+                'id',
+                'title',
+                'author',
+                'isbn',
+                'published_date',
+                'description',
+                'image_url',
+                'genres',
+                'reviews_avg_rating',
+                'reviews_count',
+            ]
+        ]
+    ]);
     }
 
     public function test_API_show(): void
     {
-        $book = Book::first();
+        $book = Book::with(['reviews','genres'])
+        ->withCount('reviews')
+        ->withAvg('reviews','rating')
+        ->first();
 
         $response = $this->get("/api/v1/books/{$book->id}");
+
         $response->assertStatus(200);
+
+        $response->assertJsonFragment([
+            'message' => '書籍の詳細取得に成功しました',
+        ]);
+
+        $response->assertJsonStructure([
+        'message',
+        'data' => [
+            'id',
+            'title',
+            'author',
+            'isbn',
+            'published_date',
+            'description',
+            'image_url',
+            'genres',
+            'reviews' => [
+            '*' => [
+                'user_name',
+                'rating',
+                'comment',
+                'created_at',
+                'updated_at',
+            ]
+        ],
+        ],
+    ]);
+
+        $response = $this->get("/api/v1/books/1000");
+        $response->assertStatus(404);
+
+        $response->assertJsonFragment([
+            'message' => '書籍が存在しません',
+        ]);
     }
 
     public function test_API_store(): void
@@ -42,13 +102,20 @@ class ApiBookControllerTest extends TestCase
             'genres' => [$genre->id]
         ]);
 
-        $response = $this->actingAs($user)
-        ->post("/api/v1/books/",$book);
+        $response = $this
+        ->actingAs($user, 'sanctum')
+        ->withHeaders([
+            'Accept'=>'application/json'
+        ])
+        ->post('/api/v1/books', $book);
 
         $response->assertStatus(201);
+        $response->assertJsonFragment([
+            'message' =>'書籍の登録に成功しました',
+        ]);
       
         $this->assertDatabaseHas('books',
-         ['isbn' => 0000000000000]);
+         ['isbn' => '0000000000000']);
         
         //中間テーブルに保存されているか確認
         $book = Book::where('isbn', '0000000000000')->first();
@@ -60,38 +127,106 @@ class ApiBookControllerTest extends TestCase
         ]);
     }
 
-    public function test_API_update(): void
-    {
-        $user = User::first();
-        $book = Book::first();
+    public function test_API_store_auth(): void{
+    $genre = Genre::first();
+    $user = User::first();
+
+    $book = [
+        'title' => 'test',
+        'author' => 'test',
+        'isbn' => '1111111111111',
+        'published_date' => '2026-06-12',
+        'genres' => [$genre->id],
+    ];
+
+    $response = $this
+    ->withHeaders([
+        'Accept'=>'application/json'
+    ])
+    ->post('/api/v1/books', $book);
+
+    $response->assertStatus(401);
+}
+
+    public function test_API_update(): void{
+        $user = User::with('books')->first();
+        $book = $user->books->first();
 
         $update_book = ([
             'title' => 'edited',
             'author' => $book->author,
             'isbn' => $book->isbn,
             'user_id' => $book->user_id,
-            'published_date' => $book->published_date,
-            'genres'=> $book->genres
+            'published_date'=>$book->published_date->format('Y-m-d'),
+            'genres' => $book->genres->pluck('id')->toArray()
         ]);
 
-        $response = $this->actingAs($user)
+        $response = $this
+        ->actingAs($user,'sanctum')
         ->put("/api/v1/books/{$book->id}",$update_book);
 
         $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'message' => '書籍の更新に成功しました',
+        ]);
 
         $this->assertDatabaseHas('books', ['title' => 'edited']);
+
+        $response = $this->get("/api/v1/books/2000");
+        $response->assertStatus(404);
+
+        $response->assertJsonFragment([
+            'message' => '書籍が存在しません',
+        ]);
     }
+
+    public function test_API_update_auth(): void{
+    $book = Book::first();$book = Book::first();
+    $otherUser = User::where('id', '!=', $book->user_id)->first();
+
+    $update_book = ([
+            'title' => 'edited',
+            'author' => $book->author,
+            'isbn' => $book->isbn,
+            'published_date'=>$book->published_date->format('Y-m-d'),
+            'genres' => $book->genres->pluck('id')->toArray()
+        ]);
+
+    $response = $this
+    ->actingAs($otherUser, 'sanctum')
+    ->put("/api/v1/books/{$book->id}",$update_book);
+
+    $response->assertStatus(403);
+}
 
     public function test_API_delete(): void
     {
-        $user = User::first();
-        $book = Book::first();
+        $user = User::with('books')->first();
+        $book = $user->books->first();
     
-        $response = $this->actingAs($user)
+        $response = $this->actingAs($user,'sanctum')
         ->delete("/api/v1/books/{$book->id}");
 
         $response->assertStatus(204);
 
-        $this->assertDatabaseMissing('books', ['id' => $user->id]);
+        $this->assertDatabaseMissing('books', ['id' => $book->id]);
+
+        $response = $this->get("/api/v1/books/3000");
+        $response->assertStatus(404);
+
+        $response->assertJsonFragment([
+            'message' => '書籍が存在しません',
+        ]);
     }
+
+    public function test_API_delete_auth(): void{
+    $book = Book::first();
+    $otherUser = User::where('id', '!=', $book->user_id)->first();
+
+    $response = $this
+        ->actingAs($otherUser, 'sanctum')
+        ->delete("/api/v1/books/{$book->id}");
+
+    $response->assertStatus(403);
+}
 }

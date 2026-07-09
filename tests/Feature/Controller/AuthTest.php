@@ -20,6 +20,11 @@ class AuthTest extends TestCase
         $response = $this->get('/register');
         $response->assertStatus(200);
 
+        $response->assertSee('名前');
+        $response->assertSee('メール');
+        $response->assertSee('パスワード');
+        $response->assertSee('パスワード確認');
+
         $user = [
             'name' => 'test',
             'email' => 'test@co.com',
@@ -35,6 +40,8 @@ class AuthTest extends TestCase
     {
         $response = $this->get('/login');
         $response->assertStatus(200);
+        $response->assertSee('メール');
+        $response->assertSee('パスワード');
 
         $user = User::first();
         $login_user = [
@@ -43,5 +50,8 @@ class AuthTest extends TestCase
         ];
         $response = $this->post('/login',$login_user);
         $response->assertRedirect('/books');
-    }    
+    }   
+
+    
+    
 }

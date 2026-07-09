@@ -23,8 +23,8 @@ use App\Http\Controllers\Api\v1\AuthController;
 
 Route::prefix('v1')->group(function () {
 
-    Route::get('/books', [BookController::class,'index']);
-    Route::get('/books/{book}', [BookController::class, 'show']);
+    Route::get('/books', [BookController::class,'index'])->name('book.index')->name('books.index');
+    Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/books', [BookController::class, 'store']);

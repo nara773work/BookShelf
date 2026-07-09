@@ -26,11 +26,11 @@ class BookResource extends JsonResource
             'genres'=> $this->genres->pluck('name'),
             
             //indexでのみ取得
-            'reviews_avg_rating'=>$this->when($request->routeIs('books.index'), $this->reviews_avg_rating),
-            'reviews_count'=>$this->when($request->routeIs('books.index'), $this->reviews_count),
+            'reviews_avg_rating'=>$this->when($request->is('api/v1/books'), $this->reviews_avg_rating),
+            'reviews_count'=>$this->when($request->is('api/v1/books'), $this->reviews_count),
             
             //showでのみ取得
-            'reviews' => $this->when($request->routeIs('books.show'), function () {
+            'reviews' => $this->when($request->is('api/v1/books/*'), function () {
                 return $this->reviews->map(function ($review) {
                     return [
                     'user_name' => $review->user->name,

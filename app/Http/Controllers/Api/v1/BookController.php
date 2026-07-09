@@ -18,7 +18,7 @@ class BookController extends Controller
         $query = Book::query();
 
         $query->withCount('reviews')
-              ->withAvg('reviews', 'rating');
+              ->withAvg('reviews', 'rating')->get();
 
         if($request->filled('keyword')){
             $keyword = $request->keyword;
@@ -48,7 +48,6 @@ class BookController extends Controller
      */
     public function store(BookRequest $request)
     {
-        
         $book = Book::create([
             'title' => $request->title,
             'author' => $request->author,
@@ -56,7 +55,7 @@ class BookController extends Controller
             'published_date' => $request->published_date,
             'description' => $request->description,
             'image_url' => $request->image_url,
-            'user_id' => 1
+            'user_id' => auth()->id()
         ]);
 
         $book->genres()->attach($request->genres);
@@ -101,6 +100,12 @@ class BookController extends Controller
             ], 404);
         }
 
+        if ($book->user_id !== auth()->id()) {      
+            return response()->json([
+                'message' => '権限がありません'
+            ], 403);
+        }
+
         $book->update([
             'title' => $request->title,
             'author' => $request->author,
@@ -132,11 +137,14 @@ class BookController extends Controller
         ], 404);
     }
 
+    if ($book->user_id !== auth()->id()) {
+        return response()->json([
+        'message' => '権限がありません'
+        ], 403);
+    }
+
         $book->delete();
 
-        return (new BookResource($book))
-        ->additional(['message' => '書籍の削除に成功しました'])
-        ->response()
-        ->setStatusCode(204);
+        return response()->noContent();
     }
 }

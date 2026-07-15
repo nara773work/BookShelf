@@ -20,6 +20,7 @@ class AuthTest extends TestCase
         $response = $this->get('/register');
         $response->assertStatus(200);
 
+        //入力フォームが表示されているか
         $response->assertSee('名前');
         $response->assertSee('メール');
         $response->assertSee('パスワード');
@@ -27,19 +28,31 @@ class AuthTest extends TestCase
 
         $user = [
             'name' => 'test',
-            'email' => 'test@co.com',
+            'email' => 'test@test.com',
             'password' => 'testpass',
             'password_confirmation' => 'testpass',
         ];
-        $response = $this->post('/register',$user);       
+
+        $response = $this->post('/register',$user);
+
         $response->assertRedirect('/books');
-        $this->assertDatabaseHas('users', ['name' => 'test']);
+        $this->assertDatabaseHas('users', [
+            'name' => 'test',
+            'email' => 'test@test.com',
+        ]);
+
+        $user = User::where('email', 'test@test.com')->first();
+
+        $this->assertTrue(
+            \Illuminate\Support\Facades\Hash::check('testpass', $user->password)
+        );
     }
 
     public function test_login(): void
     {
         $response = $this->get('/login');
         $response->assertStatus(200);
+        
         $response->assertSee('メール');
         $response->assertSee('パスワード');
 
@@ -50,8 +63,6 @@ class AuthTest extends TestCase
         ];
         $response = $this->post('/login',$login_user);
         $response->assertRedirect('/books');
-    }   
-
-    
+    }    
     
 }

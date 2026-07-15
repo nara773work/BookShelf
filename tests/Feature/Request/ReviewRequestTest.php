@@ -24,7 +24,9 @@ class ReviewRequestTest extends TestCase
         $response = $this->actingAs($user)
             ->post("/books/{$book->id}/reviews", $data);
 
-        $response->assertSessionHasErrors(['rating']);
+        $response->assertSessionHasErrors([
+            'rating'
+        ]);
     }
 
     public function test_max_length_validation(): void
@@ -40,7 +42,9 @@ class ReviewRequestTest extends TestCase
         $response = $this->actingAs($user)
             ->post("/books/{$book->id}/reviews", $data);
 
-        $response->assertSessionHasErrors(['comment']);
+        $response->assertSessionHasErrors([
+            'comment'
+        ]);
     
 }
 

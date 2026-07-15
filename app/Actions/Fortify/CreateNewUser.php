@@ -24,22 +24,23 @@ class CreateNewUser implements CreatesNewUsers
     {
         Validator::make(
             $input, [
-            'name' => ['required', 'string', 'max:50'],
+            'name' => ['required', 'max:50','string'],
             'email' => [
                 'required',
                 'email',
                 'max:100',
                 Rule::unique(User::class),
             ],
+
             'password' => $this->passwordRules(),],
             [
                 'name.required' => '名前を入力してください',
-                'name.string' => '文字列で入力してください',
                 'name.max' => '50字以内で入力してください',   
+                'name.string' => '文字列で入力してください',
             
                 'email.required' => 'メールアドレスを入力してください',
-                'email.email' =>'メール形式で入力してください',
                 'email.max' => '100字以内で入力してください',
+                'email.email' =>'メール形式で入力してください',
                 'email.unique'=>'このメールアドレスは既に使われています',
         
                 'password.required' => 'パスワードを入力してください',

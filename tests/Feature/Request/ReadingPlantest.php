@@ -31,7 +31,9 @@ class ReadingPlantest extends TestCase
         $response = $this->actingAs($user)
             ->post('/readingPlans', $data);
 
-        $response->assertSessionHasErrors(['target_date']);   
+        $response->assertSessionHasErrors([
+            'target_date'
+        ]); 
     }
 
     public function test_required_validation_post_book(): void{
@@ -45,7 +47,9 @@ class ReadingPlantest extends TestCase
         $response = $this->actingAs($user)
             ->post('/readingPlans', $data);
 
-        $response->assertSessionHasErrors(['book_id']);
+        $response->assertSessionHasErrors([
+            'book_id'
+        ]);
     }
 
 
@@ -62,6 +66,8 @@ class ReadingPlantest extends TestCase
         $response = $this->actingAs($user)
             ->put("/readingPlans/{$readingPlan->id}", $data);
 
-        $response->assertSessionDoesntHaveErrors();
+        $response->assertSessionHasErrors([
+            'target_date'
+        ]);
     }
 }

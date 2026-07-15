@@ -16,6 +16,30 @@ class BookControllertest extends TestCase
 
     use RefreshDatabase;
     protected $seed = true;
+
+    public function test_owuner_can_edit_view(): void{
+        $user = User::first();
+
+        $book = Book::where('user_id', $user->id)->firstOrFail();
+
+        $response = $this->actingAs($user)
+        ->get("/books/{$book->id}/edit");
+
+        $response->assertStatus(200);
+    }
+
+    public function test_other_user_cannot_edit_view(): void
+{
+    $book = Book::firstOrFail();
+
+    $otherUser = User::where('id', '!=', $readingPlan->user_id)
+    ->firstOrFail();
+
+    $response = $this->actingAs($user)
+    ->get("/books/{$book->id}/edit");
+
+    $response->assertForbidden(); // = assertStatus(403)
+}
     
     public function test_owuner_can_update(): void
     {
@@ -35,7 +59,7 @@ class BookControllertest extends TestCase
         $response = $this->actingAs($user)
         ->put("/books/{$book->id}", $data);
 
-        $response->assertStatus(302); 
+        $response->assertStatus(302);$response->assertStatus(302); 
     }
 
     public function test_other_user_cannot_update(): void

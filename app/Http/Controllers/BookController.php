@@ -110,7 +110,7 @@ class BookController extends Controller
 
         return redirect()
         ->route('books.index')
-        ->with('success', '書籍を編集しました'); 
+        ->with('success', '書籍を更新しました'); 
     }
 
     public function destroy(Book $book,Request $request){
@@ -149,6 +149,10 @@ class BookController extends Controller
             'published_date' => $info['publishedDate'] ?? null,
         ]);
     }
+
+    return response()->json([
+        'error' => '書籍が見つかりません。',
+    ], 404);
 }
     
     }

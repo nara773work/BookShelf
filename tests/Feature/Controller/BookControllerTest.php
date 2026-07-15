@@ -77,7 +77,6 @@ class BookControllerTest extends TestCase
         $response->assertViewHas('books', function ($book) {
             return $book->count() === 1;
         });
-
         $response->assertDontSee('人間失格');
 
         $author = Book::where('author', '夏目漱石')->first();
@@ -107,6 +106,7 @@ class BookControllerTest extends TestCase
 
         $author = Book::where('author', '夏目漱石')->first();
 
+        //検索条件が重なっても絞り込める
         $response = $this->get('/books?keyword=夏&genre=1');
         $response->assertStatus(200);
         $response->assertViewIs('books.index');
@@ -120,6 +120,7 @@ class BookControllerTest extends TestCase
     public function test_Book_index_sort(): void{
         $books = Book::all();
 
+        //title順に並び替え
         $response = $this->get('/books?sort=title');
         $response->assertViewIs('books.index');
         $response->assertViewHas('books', function ($books) {
@@ -132,6 +133,7 @@ class BookControllerTest extends TestCase
             return $ratings->toArray() === $ratings->sortDesc()->values()->toArray();
         });
 
+        //評価順に表示
         $response = $this->get('/books?sort=rating');
         $response->assertViewIs('books.index');
     }
@@ -227,6 +229,8 @@ class BookControllerTest extends TestCase
         $response = $this->actingAs($user)
         ->post("/books",$book);
 
+        $response->assertSessionHas('success', '書籍を登録しました');
+
         $response->assertRedirect('/books');
       
         $this->assertDatabaseHas('books',
@@ -267,7 +271,7 @@ class BookControllerTest extends TestCase
         $this->actingAs($user)
         ->post("/books/{$book->id}/favorites");
 
-        $response->assertRedirect('');
+        $response->assertRedirect();
         
         $this->assertDatabaseMissing('favorites', [
         'user_id' => $user->id,
@@ -329,6 +333,8 @@ class BookControllerTest extends TestCase
         $response = $this->actingAs($user)
         ->put("/books/{$book->id}",$update_book);
 
+        $response->assertSessionHas('success', '書籍を更新しました');
+
         $response->assertRedirect('/books');
 
         $this->assertDatabaseHas('books', ['title' => 'edited']);
@@ -360,5 +366,34 @@ class BookControllerTest extends TestCase
         $this->assertDatabaseMissing('reviews', ['book_id' => $book->id]);
         $this->assertDatabaseMissing('favorites', ['book_id' => $book->id]);
         $this->assertDatabaseMissing('book_genre', ['book_id' => $book->id]);
+
+        $response->assertSessionHas('success', '書籍を削除しました');
+    }
+
+    public function test_Book_isbn_get(): void
+    {
+        $user = User::first();
+        $isbn = '9784488464011';
+    
+        $response = $this->actingAs($user)
+        ->get("/books/isbn/{$isbn}");
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+        'title',
+        'author',
+        'published_date',
+    ]);
+    }
+
+    public function test_Book_isbn_error(): void
+    {
+        $user = User::first();
+        $isbn = '1111111111111';
+    
+        $response = $this->actingAs($user)
+        ->get("/books/isbn/{$isbn}");
+
+        $response->assertStatus(404);
     }
 }

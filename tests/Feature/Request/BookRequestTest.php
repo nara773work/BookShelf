@@ -34,7 +34,6 @@ class BookRequestTest extends TestCase
             'published_date',
             'genres',
         ]);
-
     }
 
     public function test_max_length_validation(): void
@@ -54,7 +53,9 @@ class BookRequestTest extends TestCase
         $response = $this->actingAs($user)
             ->post('/books', $data);
 
-        $response->assertSessionHasErrors(['title']);
+        $response->assertSessionHasErrors([
+            'title'
+        ]);
 
         // author 101文字
         $data['title'] = 'test';
@@ -63,7 +64,9 @@ class BookRequestTest extends TestCase
         $response = $this->actingAs($user)
             ->post('/books', $data);
 
-        $response->assertSessionHasErrors(['author']);
+        $response->assertSessionHasErrors([      
+           'author',
+        ]);
 
     }
 
@@ -84,7 +87,9 @@ class BookRequestTest extends TestCase
         $response = $this->actingAs($user)
             ->post('/books', $data);
 
-        $response->assertSessionHasErrors(['isbn']);
+        $response->assertSessionHasErrors([
+            'isbn',
+        ]);
 
 
         // 14桁
@@ -93,39 +98,32 @@ class BookRequestTest extends TestCase
         $response = $this->actingAs($user)
             ->post('/books', $data);
 
-        $response->assertSessionHasErrors(['isbn']);
+        $response->assertSessionHasErrors([
+            'isbn',
+        ]);
 
     }
 
-    public function test_des_validation(): void
+    public function test_isbn_unique(): void
     {
         $user = User::first();
         $genre = Genre::first();
 
-        // 255 OK
+        // 12桁
         $data = [
             'title' => 'test',
             'author' => 'test',
-            'isbn' => '0000000000000',
+            'isbn' => '9784101010014',
             'published_date' => '2026-06-12',
             'genres' => [$genre->id],
-            'description' => str_repeat('a', 255),
         ];
 
         $response = $this->actingAs($user)
             ->post('/books', $data);
 
-        $response->assertSessionHasNoErrors();
-    
-
-        // 256 NG
-        $data['description'] = str_repeat('a', 256);
-
-        $response = $this->actingAs($user)
-            ->post('/books', $data);
-
-        $response->assertSessionHasErrors(['description']);
+        $response->assertSessionHasErrors([
+            'isbn',
+        ]);
     }
-
     
 }

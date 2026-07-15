@@ -20,13 +20,13 @@ class GenreControllerTest extends TestCase
     public function test_Genre_index(): void
     {
         $user = User::first();
-        $genres = Genre::withCount('books')->first();
-        $books = $genres->books_count;
+        $genre = Genre::with('books')->first();
+        $books = $genre->books_count;
 
         $response = $this->actingAs($user)->get('/genres');
         $response->assertStatus(200);
 
-        $response->assertSee($genres->name);
+        $response->assertSee($genre->name);
         $response->assertSee($books);
         $response->assertViewIs('genres.index');
     }
@@ -42,12 +42,28 @@ class GenreControllerTest extends TestCase
         $genre = Genre::with('books')->first();
         $books = $genre->books->first();
 
-        $response = $this->actingAs($user)->get("/genres/{$genre->id}");
+        $response = $this->actingAs($user)
+        ->get("/genres/{$genre->id}");
+
         $response->assertStatus(200);
+
         $response->assertViewIs('genres.show');
+
+        $response->assertViewHas('genre', function ($genre) {
+            return $genre->books->count() === 3;
+        });
+
         $response->assertSee($genre->name);
         $response->assertSee($books->title);
         $response->assertSee($books->author);
+    }
+
+    public function test_Genre_show_ridirect(): void{
+
+        $genre = Genre::with('books')->first();
+        $books = $genre->books->first();
+        $response = $this->get("/genres/{$genre->id}");
+        $response->assertRedirect('/login');
     }
 
     public function test_Genre_create(): void
@@ -80,6 +96,7 @@ class GenreControllerTest extends TestCase
         $response->assertStatus(302);
       
         $this->assertDatabaseHas('genres', ['name' => 'test']);
+        $response->assertSessionHas('success', 'ジャンルを登録しました');
     }
 
     public function test_Genre_edit(): void
@@ -119,6 +136,8 @@ class GenreControllerTest extends TestCase
         $response->assertRedirect('/genres');
 
         $this->assertDatabaseHas('genres', ['name' => 'edited']);
+
+        $response->assertSessionHas('success', 'ジャンルを更新しました');
     }
 
     public function test_Genre_cannot_delete(): void

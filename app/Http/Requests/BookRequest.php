@@ -24,13 +24,13 @@ class BookRequest extends FormRequest
     {
         return [
             'title' =>['required','max:150',],
-            'author'=>['required','max:100','string'],
+            'author'=>['required','max:100'],
             'isbn'=>['required','digits:13',
                     Rule::unique('books', 'isbn')
                     ->ignore($this->book),],
             'published_date'=>['required'],
             'description'=>['nullable'], //説明の中で数字を使う可能性を考慮し文字列のみにしない
-            'image_url',
+            'image_url'=>['nullable'],
             'genres'=>['required']
         ];
     }
@@ -38,15 +38,18 @@ class BookRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'タイトルを入力してください',
+            'title.required' => '本のタイトルを入力してください',
             'title.max'=>'150字以内で入力してください',
+
             'author.required' => '著者を入力してください',
             'author.max'=>'100字以内で入力してください',
-            'author.string'=>'文字列で入力してください',
+
             'isbn.required' => 'isbnコードを入力してください',
             'isbn.digits'=>'13字で入力してください',
             'isbn.unique'=>'そのisbnコードは既に存在しています',
+
             'published_date.required' => '出版日を入力してください',
+
             'genres.required' => 'ジャンルを選択してください',
         ];
     }

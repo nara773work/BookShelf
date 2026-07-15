@@ -32,6 +32,14 @@ class ReadingplanControllerTest extends TestCase
 
     }
 
+    public function test_ReadingPlan_index_redirect(): void{
+        $response = $this
+        ->get('/reading-plans');
+
+        $response->assertRedirect('/login');
+
+    }
+
     public function test_ReadingPlan_index_fillter(): void{
         $user = User::first();
 

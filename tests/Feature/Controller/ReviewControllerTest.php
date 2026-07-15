@@ -38,6 +38,8 @@ class ReviewControllerTest extends TestCase
             'comment' => 'test',
             'user_id' => $user->id,
             'book_id' => $book->id]);
+        
+        $response->assertSessionHas('success', 'レビューを登録しました');
     }
 
     public function test_Review_store_redirect(): void{
@@ -125,6 +127,8 @@ class ReviewControllerTest extends TestCase
             'comment' => 'test',
             'user_id' => $user->id,
             'book_id' => $book->id]);
+
+        $response->assertSessionHas('success', 'レビューを更新しました');
     }
 
     public function test_Review_delete(): void
@@ -140,5 +144,7 @@ class ReviewControllerTest extends TestCase
 
         $this->assertDatabaseMissing('reviews', ['id' => $review->id]);
         $this->assertDatabaseMissing('review_likes', ['review_id' => $review->id]);
+
+        $response->assertSessionHas('success', 'レビューを削除しました');
     }
 }

@@ -54,13 +54,11 @@ class ReviewSeeder extends Seeder
             Review::create([
                 'user_id' => $userId,
                 'book_id' => $book->id,
-                'rating' => rand(3, 5),
+                'rating' => rand(1, 5),
                 'comment' => fake()->realText(100),
             ]);
     }
-}
-
-                
+}             
         }
     }
 

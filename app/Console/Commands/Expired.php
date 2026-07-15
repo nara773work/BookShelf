@@ -31,10 +31,19 @@ class Expired extends Command
 
         $today = Carbon::today();
 
+        ReadingPlan::whereDate('target_date', '<', $today)
+        ->whereIn('status', [
+            ReadingPlanStatus::Reading->value,
+        ])
+        ->update([
+            'status' => ReadingPlanStatus::Expired,
+        ]);
+
         $plans = ReadingPlan::whereDate('target_date', '<', $today)
         ->where('status', ReadingPlanStatus::Expired->value)
         ->get();
 
+        //logを出力する、成功失敗もわかるようにするとよい
         foreach ($plans as $plan) {
             if ($plan->reminded_at) {
                 continue;

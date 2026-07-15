@@ -44,14 +44,14 @@ Route::middleware('auth')
     Route::post('/notifications/{id}/read', [NotificationController::class,'read'])->name('notifications.read');
 });
 
-//ISBN 
-Route::get('/books/isbn/{isbn}', [BookController::class,'isbn']);
-
 //book　新規登録
 Route::middleware('auth')->group(function () {
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
     Route::post('/books',[BookController::class,'store'])->name('books.store');
-    });
+
+//ISBN 
+    Route::get('/books/isbn/{isbn}',[BookController::class,'isbn']);
+});
 
 
 //genres 新規登録

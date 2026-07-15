@@ -34,6 +34,7 @@ class BookRequestTest extends TestCase
             'published_date',
             'genres',
         ]);
+
     }
 
     public function test_max_length_validation(): void
@@ -63,6 +64,7 @@ class BookRequestTest extends TestCase
             ->post('/books', $data);
 
         $response->assertSessionHasErrors(['author']);
+
     }
 
     public function test_isbn_validation(): void
@@ -84,6 +86,7 @@ class BookRequestTest extends TestCase
 
         $response->assertSessionHasErrors(['isbn']);
 
+
         // 14桁
         $data['isbn'] = str_repeat('1', 14);
 
@@ -91,6 +94,7 @@ class BookRequestTest extends TestCase
             ->post('/books', $data);
 
         $response->assertSessionHasErrors(['isbn']);
+
     }
 
     public function test_des_validation(): void
@@ -112,6 +116,7 @@ class BookRequestTest extends TestCase
             ->post('/books', $data);
 
         $response->assertSessionHasNoErrors();
+    
 
         // 256 NG
         $data['description'] = str_repeat('a', 256);
@@ -121,4 +126,6 @@ class BookRequestTest extends TestCase
 
         $response->assertSessionHasErrors(['description']);
     }
+
+    
 }

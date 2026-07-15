@@ -1,8 +1,10 @@
 BookControllerTest
 //概要
 Controllerに記載されている機能をテストする
+Laravel Sanctum を導入し、認証＋認可を行う
+（Bearer トークン（Authorization ヘッダ）による認証方式）
 
-test_Book_index_
+test_Book_index
 ・GETメソッドで一覧ページを表示する　
 ・書籍が10件のページネーションで表示されている
 ・各書籍に紐づくジャンル、平均評価、レビュー件数が表示されている
@@ -45,13 +47,3 @@ test_コントローラー名_delete（認証必須）
 ・認可エラー時「403」
 ※書籍が紐づいてるジャンルは削除できない
 
-※Laravel Sanctum を導入しているため、
-Bearer トークン（Authorization ヘッダ）による認証方式を採用
-→これテストできてるか微妙なので再テスト
-
-メモ　こういう書き方する
-$token = $user->createToken('test')->plainTextToken;
-$response = $this->withHeaders([
-    'Authorization' => 'Bearer ' . $token,
-    'Accept' => 'application/json',
-])->post('/api/v1/books', $book);

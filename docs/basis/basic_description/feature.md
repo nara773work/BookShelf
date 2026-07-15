@@ -1,67 +1,55 @@
 機能テスト
 
-//Controller
-Auth
-controller.md
-  Api_BookController
-　BookController
-　ReviewController
-　GenreController
-　(その他)
-　RankingController
-　FavoriteController
+Controller
+1.Auth
+2.controller.md
+・Api_BookController
+・BookController
+・ReviewController
+・GenreController
+(その他)
+・RankingController
+・FavoriteController
 
 ・ページ推移
-　ユーザー登録画面、ログイン画面
-  書籍登録・更新・削除画面
-　レビュー登録・更新・削除画面
-　ジャンル登録・更新・削除画面
-　ランキング画面
-　お気に入り画面
+　ユーザー登録画面、ログイン画面(AuthTest)
+  書籍登録・更新・削除画面(Book)
+　レビュー登録・更新・削除画面(Review)
+　ジャンル登録・更新・削除画面(Genre)
+　ランキング画面(ranking)
+　お気に入り画面(favorite)
 →それぞれに必要な表示がされているか確認
 
 ・リレーションテスト
-　書籍登録時にジャンルの中間テーブルに保存されるか
-　              〃                  削除されるか
-　レビュー削除時にレビューいいねも削除されるか
-　お気に入り解除時にfavoritesテーブルから削除されるか
+  中間テーブル[Book_genre(user.id,genre.id),favorites(user.id,book.id),reviewLikes(user.id,review.id)]
+　書籍登録時にジャンルの中間テーブルに保存、または削除されるか
+  お気に入りマークを押したときに、favoritesテーブルに保存、または削除されるか
+  いいねマークを押したときに、reviewLikesテーブルに保存、または削除されるか
+  書籍削除時にお気に入りも削除されるか
+  レビュー削除時にレビューのいいねも削除されるか
+
+  外部キー[Books(user.id),reviews(user.id,book.id),readingPlans(user.id)]
 
 ・DBテスト
 　DBに保存されているか、DBから削除されているか
 
-・認可テスト
+・認可テスト(Policy)
 　許可された人以外はその操作ができないか
 
 ・認証テスト
 　許可された人以外はその操作ができないか
 
 
-BookRequest
-GenreRequest
-ReviewRequest
+バリデーションテスト
 
-//Request
-Request.md
-・バリデーションテスト
-　バリデーションが正常に働いているか、異常な値ははじかれるか
-　フラッシュメッセージが表示されるか
+Request
+1.BookRequest
+2.GenreRequest
+3.ReviewRequest
+
+正常系
+バリデーションが正常に働いているか、異常な値ははじかれるか
+フラッシュメッセージが表示されるか
 
 
 
-2026.07.09時点メモ
-・一通り機能をテストするテストコードを実装した。
-　上記機能が必ず実装されているか確認必須
-・バリデーションテストは基本Controllerのみ実装済み
-
-未実装
-・policyテスト
-→認証はテストしているけど、認可は実装できていないはず
-・フラッシュメッセージが正常に表示されているか
-→単体テスト？？
-・ページネーションが必要な場面でデータ数不足
-・APIBookControllerのindex、ジャンル絞り込みやキーワード検索テスト
-
-未確認
-・機能テスト
-・バリデーションテスト
-・ポリシーテスト

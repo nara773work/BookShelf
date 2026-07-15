@@ -60,6 +60,12 @@ class BookController extends Controller
 
         $book->genres()->attach($request->genres);
 
+        if ($book->user_id !== auth()->id()) {      
+            return response()->json([
+                'message' => 'ログインしてください'
+            ], 401);
+        }
+
         return (new BookResource($book))
         ->additional(['message' => '書籍の登録に成功しました'])
         ->response()
@@ -102,7 +108,7 @@ class BookController extends Controller
 
         if ($book->user_id !== auth()->id()) {      
             return response()->json([
-                'message' => '権限がありません'
+                'message' => 'この操作を行う権限がありません'
             ], 403);
         }
 
@@ -139,7 +145,7 @@ class BookController extends Controller
 
     if ($book->user_id !== auth()->id()) {
         return response()->json([
-        'message' => '権限がありません'
+        'message' => 'この操作を行う権限がありません'
         ], 403);
     }
 

@@ -16,6 +16,9 @@ class ReadingplanControllerTest extends TestCase
     /**
      * A basic feature test example.
      */
+    use RefreshDatabase;
+    protected $seed = true;
+    
     public function test_ReadingPlan_index(): void
     {
         $user = User::first();
@@ -78,6 +81,16 @@ class ReadingplanControllerTest extends TestCase
         $response->assertViewIs('reading-plans.create');
 
         $response->assertSee($book->title);
+    }
+
+    public function test_ReadingPlan_create_ridairect(): void
+    {
+        $book = Book::first();
+
+        $response = $this
+        ->get('/reading-plans/create');
+
+        $response->assertRedirect('/login');
     }
 
     public function test_ReadingPlan_store(): void

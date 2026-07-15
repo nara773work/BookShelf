@@ -102,10 +102,13 @@ class ApiBookControllerTest extends TestCase
             'genres' => [$genre->id]
         ]);
 
+
+        $token = $user->createToken('test')->plainTextToken;
         $response = $this
-        ->actingAs($user, 'sanctum')
+        ->actingAs($user,'sanctum')
         ->withHeaders([
-            'Accept'=>'application/json'
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
         ])
         ->post('/api/v1/books', $book);
 
@@ -161,8 +164,13 @@ class ApiBookControllerTest extends TestCase
             'genres' => $book->genres->pluck('id')->toArray()
         ]);
 
+        $token = $user->createToken('test')->plainTextToken;
         $response = $this
         ->actingAs($user,'sanctum')
+        ->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ])
         ->put("/api/v1/books/{$book->id}",$update_book);
 
         $response->assertStatus(200);
@@ -204,7 +212,14 @@ class ApiBookControllerTest extends TestCase
         $user = User::with('books')->first();
         $book = $user->books->first();
     
-        $response = $this->actingAs($user,'sanctum')
+        $token = $user->createToken('test')->plainTextToken;
+        
+        $response = $this
+        ->actingAs($user,'sanctum')
+        ->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ])
         ->delete("/api/v1/books/{$book->id}");
 
         $response->assertStatus(204);

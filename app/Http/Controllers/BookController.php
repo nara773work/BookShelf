@@ -123,14 +123,16 @@ class BookController extends Controller
         ->with('success', '書籍を削除しました'); 
     }
 
-    public function isbn(Request $request)
+    public function isbn(Request $request,$isbn)
 {
-    $isbn = $request->isbn;
+    $apiKey = 'AIzaSyAsovsHBdcHvjTLlY-zr8YGBW3QRAw9F68';
 
-    $response = Http::timeout(10)
-        ->get('https://www.googleapis.com/books/v1/volumes', [
-            'q' => 'isbn:' . $isbn,
-        ]);
+    $response = Http::timeout(5)
+    ->get('https://www.googleapis.com/books/v1/volumes', 
+    [
+        'q' => 'isbn:' . $isbn ,
+        'key' => $apiKey,
+    ]);
 
     $data = $response->json();
 
@@ -147,11 +149,6 @@ class BookController extends Controller
             'published_date' => $info['publishedDate'] ?? null,
         ]);
     }
-
-    // エラー時は 'error' キーで返すことで、JS側の if (data.error) にヒットさせます
-    return response()->json([
-        'error' => 'エラー'
-    ], 404);
 }
     
     }

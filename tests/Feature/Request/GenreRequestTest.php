@@ -24,6 +24,7 @@ class GenreRequestTest extends TestCase
             ->post('/genres', $data);
 
         $response->assertSessionHasErrors(['name']);
+
     }
 
     public function test_max_length_validation(): void

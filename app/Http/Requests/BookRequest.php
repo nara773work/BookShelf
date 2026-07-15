@@ -29,7 +29,7 @@ class BookRequest extends FormRequest
                     Rule::unique('books', 'isbn')
                     ->ignore($this->book),],
             'published_date'=>['required'],
-            'description'=>['nullable','max:255'], //説明の中で数字を使う可能性を考慮し文字列のみにしない
+            'description'=>['nullable'], //説明の中で数字を使う可能性を考慮し文字列のみにしない
             'image_url',
             'genres'=>['required']
         ];
@@ -47,7 +47,6 @@ class BookRequest extends FormRequest
             'isbn.digits'=>'13字で入力してください',
             'isbn.unique'=>'そのisbnコードは既に存在しています',
             'published_date.required' => '出版日を入力してください',
-            'description.max'=>'255字以内で入力してください',
             'genres.required' => 'ジャンルを選択してください',
         ];
     }

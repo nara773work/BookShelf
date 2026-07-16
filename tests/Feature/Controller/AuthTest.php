@@ -64,5 +64,17 @@ class AuthTest extends TestCase
         $response = $this->post('/login',$login_user);
         $response->assertRedirect('/books');
     }    
+
+    public function test_logout(): void
+    {
+        $user = User::first();
+
+        $response = $this->actingAs($user)
+        ->post('/logout');
+
+        $response->assertRedirect('/login');
+
+        $this->assertGuest();
+}
     
 }

@@ -19,9 +19,12 @@ class NotificationsControllerTest extends TestCase
     public function test_index(): void
     {
         $user = User::first();
+        $notifications = $user->notifications()->first();
 
         $response = $this->actingAs($user)
         ->get("/notifications");
+
+        $response->assertViewHas('notifications');
 
         $response->assertStatus(200);
     }

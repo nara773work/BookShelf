@@ -39,8 +39,14 @@ class GenreControllerTest extends TestCase
     public function test_Genre_show(): void
     {
         $user = User::first();
-        $genre = Genre::with('books')->first();
-        $books = $genre->books->first();
+        $genre = Genre::first();
+        $books = Book::factory()
+        ->count(12)
+        ->create([
+            'user_id' => $user->id,
+        ]);
+
+        $genre->books()->attach($books->pluck('id'));
 
         $response = $this->actingAs($user)
         ->get("/genres/{$genre->id}");
@@ -50,12 +56,24 @@ class GenreControllerTest extends TestCase
         $response->assertViewIs('genres.show');
 
         $response->assertViewHas('genre', function ($genre) {
-            return $genre->books->count() === 3;
+            return $genre->books->count() === 15;
         });
 
+        $response->assertViewHas('books', function ($favorites) {
+            return $favorites->count() === 10;
+        });
+
+        $book = $books->first();
+
         $response->assertSee($genre->name);
-        $response->assertSee($books->title);
-        $response->assertSee($books->author);
+        $response->assertSee($book->title);
+        $response->assertSee($book->author);
+
+        $response = $this->actingAs($user)->get("/genres/{$genre->id}?page=2");
+        $response->assertViewHas('books', function ($favorites) {
+            return $favorites->count() === 5; //シーダーの3、ファクトリーの12で計15のダミーデータが存在している
+        });
+        
     }
 
     public function test_Genre_show_ridirect(): void{

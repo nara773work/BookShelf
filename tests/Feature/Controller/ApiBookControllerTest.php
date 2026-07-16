@@ -38,8 +38,115 @@ class ApiBookControllerTest extends TestCase
                 'reviews_avg_rating',
                 'reviews_count',
             ]
-        ]
+        ],
+        'meta'
     ]);
+    }
+
+    public function test_Book_index_paginate(): void{
+        $response = $this->get('/api/v1/books');
+        $response->assertStatus(200);
+
+        $this->assertCount(
+            10,
+            $response->json('data')
+        );
+
+        $response = $this->get('/api/v1/books?page=2');
+
+        $this->assertCount(
+            1,
+            $response->json('data')
+        );
+    }
+
+    public function test_Book_index_view_genre(): void{
+        $book = Book::first();
+        $genre = $book->genres->first();
+
+        $response = $this->get('/api/v1/books');
+
+        //各書籍に紐づいているジャンルが表示されている
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    'genres'
+                ]
+            ]
+        ]);
+    }
+
+    public function test_Book_index_fillter(): void
+    {
+        $keyword = '猫';
+        $book = Book::where('title', '吾輩は猫である')
+        ->first();
+
+        $response = $this->get("/api/v1/books?keyword={$keyword}");
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'title' => $book->title,
+        ]);
+
+        $this->assertCount(
+            1,
+            $response->json('data')
+        );
+
+        $response = $this->get('/api/v1/books?keyword=夏');
+
+        $this->assertCount(
+            2,
+            $response->json('data')
+        );
+    }
+
+    public function test_Book_index_genre_fillter(): void{
+        $genres = Genre::first();//検索でジャンル=1を選択
+        
+        $response = $this->get("/api/v1/books?genre={$genres->id}");
+        $response->assertStatus(200);
+
+        foreach($response->json('data') as $book){
+
+            $this->assertContains(
+                $genres->name,
+                $book['genres']
+            );
+        }
+
+        $this->assertCount(
+            3,
+            $response->json('data')
+        );
+
+        //検索条件が重なっても絞り込める
+        $response = $this->get("/api/v1/books?keyword=夏&genre={$genres->id}");
+        
+        $response->assertStatus(200);
+
+        $this->assertCount(
+            2,
+            $response->json('data')
+        );
+    }
+
+    public function test_Book_index_sort(): void{
+        $books = Book::orderBy('title');
+
+        //title順に並び替え
+        $response = $this->get("/api/v1/books?sort=title");
+
+        $titles = collect($response->json('data'))
+        ->pluck('title')
+        ->values();
+
+        $this->assertEquals(
+            $titles->sort()->values()->toArray(),
+            $titles->toArray()
+        );
+        
     }
 
     public function test_API_show(): void
@@ -225,6 +332,11 @@ class ApiBookControllerTest extends TestCase
         $response->assertStatus(204);
 
         $this->assertDatabaseMissing('books', ['id' => $book->id]);
+
+        //お気に入り、レビュー、ジャンルの紐づけが削除されているか
+        $this->assertDatabaseMissing('reviews', ['book_id' => $book->id]);
+        $this->assertDatabaseMissing('favorites', ['book_id' => $book->id]);
+        $this->assertDatabaseMissing('book_genre', ['book_id' => $book->id]);
 
         $response = $this->get("/api/v1/books/3000");
         $response->assertStatus(404);

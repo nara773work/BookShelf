@@ -29,7 +29,6 @@ class ReadingplanControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('reading-plans.index');
-
     }
 
     public function test_ReadingPlan_index_redirect(): void{

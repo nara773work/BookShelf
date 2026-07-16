@@ -18,21 +18,26 @@ class BookController extends Controller
         $query = Book::query();
 
         $query->withCount('reviews')
-              ->withAvg('reviews', 'rating')->get();
+              ->withAvg('reviews', 'rating')
+              ->with('genres');
 
         if($request->filled('keyword')){
             $keyword = $request->keyword;
 
-            $query->where(function ($q) use ($keyword) {
-            $q->where('title', 'like', "%{$keyword}%")
-              ->orWhere('author', 'like', "%{$keyword}%");
-              });
+            $query->where(function($q) use($keyword) {
+                $q->where('title', 'like', "%{$keyword}%")
+                  ->orWhere('author', 'like', "%{$keyword}%");
+            });
         }
 
-        if ($request->filled('genres')) {
+        if ($request->filled('genre')) {
             $query->whereHas('genres', function ($q) use ($request) {
-                $q->where('genres.id', $request->genres);
+                $q->where('genres.id', $request->genre);
             });
+        }
+
+        if($request->sort === 'title'){
+            $query->orderBy('title');
         }
 
         $books = $query->paginate(10);

@@ -10,7 +10,7 @@ class RankingController extends Controller
     public function index(){
 
         $rankedBooks = Book::withAvg('reviews', 'rating')
-        ->having('reviews_avg_rating', '>', 0)
+        ->whereHas('reviews')
         ->orderByDesc('reviews_avg_rating')
         ->take(10)
         ->get();

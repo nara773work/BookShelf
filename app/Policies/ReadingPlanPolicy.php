@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Policies;
+
 use App\Models\ReadingPlan;
 use App\Models\User;
 
@@ -9,9 +10,9 @@ class ReadingPlanPolicy
     /**
      * Create a new policy instance.
      */
-    public function view(User $user,ReadingPlan $readingPlans): bool
+    public function view(User $user, ReadingPlan $readingPlans): bool
     {
-       return $user->id === $readingPlans->user_id;
+        return $user->id === $readingPlans->user_id;
     }
 
     /**

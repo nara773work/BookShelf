@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Requests;
-use Illuminate\Validation\Rule;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class BookRequest extends FormRequest
 {
@@ -18,20 +19,20 @@ class BookRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'title' =>['required','max:150',],
-            'author'=>['required','max:100'],
-            'isbn'=>['required','digits:13',
-                    Rule::unique('books', 'isbn')
-                    ->ignore($this->book),],
-            'published_date'=>['required'],
-            'description'=>['nullable'], //説明の中で数字を使う可能性を考慮し文字列のみにしない
-            'image_url'=>['nullable'],
-            'genres'=>['required']
+            'title' => ['required', 'max:150'],
+            'author' => ['required', 'max:100'],
+            'isbn' => ['required', 'digits:13',
+                Rule::unique('books', 'isbn')
+                    ->ignore($this->book), ],
+            'published_date' => ['required'],
+            'description' => ['nullable'], // 説明の中で数字を使う可能性を考慮し文字列のみにしない
+            'image_url' => ['nullable'],
+            'genres' => ['required'],
         ];
     }
 
@@ -39,14 +40,14 @@ class BookRequest extends FormRequest
     {
         return [
             'title.required' => '本のタイトルを入力してください',
-            'title.max'=>'150字以内で入力してください',
+            'title.max' => '150字以内で入力してください',
 
             'author.required' => '著者を入力してください',
-            'author.max'=>'100字以内で入力してください',
+            'author.max' => '100字以内で入力してください',
 
             'isbn.required' => 'isbnコードを入力してください',
-            'isbn.digits'=>'13字で入力してください',
-            'isbn.unique'=>'そのisbnコードは既に存在しています',
+            'isbn.digits' => '13字で入力してください',
+            'isbn.unique' => 'そのisbnコードは既に存在しています',
 
             'published_date.required' => '出版日を入力してください',
 

@@ -17,7 +17,7 @@ enum ReadingPlanStatus: string
         };
     }
 
-        public function label(): string
+    public function label(): string
     {
         return match ($this) {
             self::Reading => '読書中',

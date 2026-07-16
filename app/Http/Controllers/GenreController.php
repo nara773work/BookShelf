@@ -2,29 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Genre;
-use App\Models\Book;
 use App\Http\Requests\GenreRequest;
+use App\Models\Genre;
+use Illuminate\Http\Request;
 
 class GenreController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $genres = Genre::withCount('books')->get();
-        return view('genres/index',compact('genres'));
+
+        return view('genres/index', compact('genres'));
     }
 
-    public function show(Request $request,$id){
+    public function show(Request $request, $id)
+    {
         $genre = Genre::findOrFail($id);
         $books = $genre->books()->paginate(10);
-        return view('genres/show',compact('genre','books'));
+
+        return view('genres/show', compact('genre', 'books'));
     }
 
-    public function create(){
+    public function create()
+    {
         return view('genres/create');
     }
 
-    public function store(GenreRequest $request){
+    public function store(GenreRequest $request)
+    {
 
         $genres = Genre::withCount('books')->get();
         $genre = Genre::create([
@@ -32,36 +37,41 @@ class GenreController extends Controller
         ]);
 
         return redirect()
-        ->route('genres.index')
-        ->with('success', 'ジャンルを登録しました'); 
+            ->route('genres.index')
+            ->with('success', 'ジャンルを登録しました');
     }
 
-    public function edit(Request $request,$id){
+    public function edit(Request $request, $id)
+    {
         $genre = Genre::findOrFail($id);
-        return view('genres/edit',compact('genre'));
+
+        return view('genres/edit', compact('genre'));
     }
 
-    public function update(GenreRequest $request,$id){
+    public function update(GenreRequest $request, $id)
+    {
         $genre = Genre::findOrFail($id);
         $genre->update([
             'name' => $request->name,
         ]);
+
         return redirect()
-        ->route('genres.index')
-        ->with('success', 'ジャンルを更新しました'); 
+            ->route('genres.index')
+            ->with('success', 'ジャンルを更新しました');
     }
 
-    public function destroy(Request $request,$id){
+    public function destroy(Request $request, $id)
+    {
         $genre = Genre::findOrFail($id);
-        if($genre->books()->count() == 0){
+        if ($genre->books()->count() == 0) {
             $genre->delete();
-        }
-        else{
+        } else {
             return redirect()->route('genres.index')
-            ->with('error', '紐づいている書籍があるため削除できません'); 
+                ->with('error', '紐づいている書籍があるため削除できません');
         }
+
         return redirect()
-        ->route('genres.index')
-        ->with('success', 'ジャンルを削除しました'); 
+            ->route('genres.index')
+            ->with('success', 'ジャンルを削除しました');
     }
 }

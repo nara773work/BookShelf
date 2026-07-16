@@ -8,16 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Book extends Model
 {
     use HasFactory;
-    protected $fillable = 
-    [
-        'title',
-        'author',
-        'isbn',
-        'published_date',
-        'description',
-        'image_url',
-        'user_id',
-    ];
+
+    protected $fillable =
+        [
+            'title',
+            'author',
+            'isbn',
+            'published_date',
+            'description',
+            'image_url',
+            'user_id',
+        ];
 
     protected $casts = [
         'published_date' => 'date',
@@ -27,14 +28,17 @@ class Book extends Model
     {
         return $this->belongsToMany(Genre::class);
     }
+
     public function favoritebooks()
     {
-        return $this->belongsToMany(User::class,'favorites','book_id','user_id');
+        return $this->belongsToMany(User::class, 'favorites', 'book_id', 'user_id');
     }
+
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
+
     public function user()
     {
         return $this->belongsTo(user::class);

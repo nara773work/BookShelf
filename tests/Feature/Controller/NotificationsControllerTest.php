@@ -2,14 +2,10 @@
 
 namespace Tests\Feature\Controller;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Book;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\Notifications\ExpiredNotification;
-use App\Notifications\ReminderNotification;
+use Tests\TestCase;
 
 class NotificationsControllerTest extends TestCase
 {
@@ -22,7 +18,7 @@ class NotificationsControllerTest extends TestCase
         $notifications = $user->notifications()->first();
 
         $response = $this->actingAs($user)
-        ->get("/notifications");
+            ->get('/notifications');
 
         $response->assertViewHas('notifications');
 
@@ -33,17 +29,17 @@ class NotificationsControllerTest extends TestCase
     {
         $user = User::first();
         $book = Book::first();
-        
+
         $user->notify(new ExpiredNotification($book));
 
         $notifications = $user->notifications()->first();
 
         $responses = $this
-        ->actingAs($user)
-        ->from('/notifications')
-        ->post("/notifications/{$notifications->id}/read");
+            ->actingAs($user)
+            ->from('/notifications')
+            ->post("/notifications/{$notifications->id}/read");
 
-        $responses->assertRedirect("/notifications");
+        $responses->assertRedirect('/notifications');
 
         $notifications->refresh();
 

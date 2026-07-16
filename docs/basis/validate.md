@@ -54,14 +54,21 @@ ReviewRequest
     genre：必須
 　　必須：ジャンルを選択してください
 
+検索・フィルター（エラーメッセージなし）
+    keyword：nullable|max:255
+    genre：nullable|integer|exists:genres,id
+    page：nullable|integer|min:1
+    per_page：nullable|integer|min:1|max:100
+
 ジャンル登録、編集（公開APIも同様）
 　　name：必須|max:50
 　　必須：ジャンル名を入力してください
 　　max：50字以内で入力してください
 
 レビュー登録、編集（公開APIも同様）
-　　rating：必須
+　　rating：必須|範囲
 　　必須：評価を選択してください
+　　範囲：星1～星5の範囲で選択してください
 
 　　comment：任意|max:255
     max：255字以内で入力してください
@@ -69,11 +76,12 @@ ReviewRequest
 　　 コメントは具体的な内容を示すものなので任意扱いとする。
 
 読書計画作成、編集
-    book_id：必須
+    book_id：必須|同じ書籍は選べない
     必須：書籍を選択してください
 
     target_date：必須
     必須：期日を選択してください
 
-    target_date.after_or_equal：新規作成時のみ有効
-    →本日以降の日付を選択してください
+新規作成時のみ有効
+    exists：この書籍の計画は既に存在しています
+    target_date.after_or_equal：本日以降の日付を選択してください

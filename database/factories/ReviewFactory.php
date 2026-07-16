@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
+ * @extends Factory<Post>
  */
 class ReviewFactory extends Factory
 {
@@ -17,9 +18,9 @@ class ReviewFactory extends Factory
     public function definition(): array
     {
         return [
-            'rating' => fake()->numberBetween(1, 5),           
+            'rating' => fake()->numberBetween(1, 5),
             'comment' => fake()->sentence(),
-            'book_id' =>Book::numberBetween(1, 11),    
+            'book_id' => Book::numberBetween(1, 11),
         ];
     }
 }

@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Review;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ReviewPolicy
 {
@@ -19,7 +18,7 @@ class ReviewPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user,): bool
+    public function create(User $user): bool
     {
         return true;
     }
@@ -39,5 +38,4 @@ class ReviewPolicy
     {
         return $user->id === $review->user_id;
     }
-
 }

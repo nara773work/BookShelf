@@ -2,12 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use App\Models\Book;
 use App\Models\Genre;
 use App\Models\User;
-use App\Models\Book;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class GenreControllerTest extends TestCase
 {
@@ -15,9 +14,10 @@ class GenreControllerTest extends TestCase
      * A basic feature test example.
      */
     use RefreshDatabase;
+
     protected $seed = true;
 
-    public function test_Genre_index(): void
+    public function test_genre_index(): void
     {
         $user = User::first();
         $genre = Genre::with('books')->first();
@@ -31,25 +31,26 @@ class GenreControllerTest extends TestCase
         $response->assertViewIs('genres.index');
     }
 
-    public function test_Genre_index_ridirect(): void{
+    public function test_genre_index_ridirect(): void
+    {
         $response = $this->get('/genres');
         $response->assertRedirect('/login');
     }
 
-    public function test_Genre_show(): void
+    public function test_genre_show(): void
     {
         $user = User::first();
         $genre = Genre::first();
         $books = Book::factory()
-        ->count(12)
-        ->create([
-            'user_id' => $user->id,
-        ]);
+            ->count(12)
+            ->create([
+                'user_id' => $user->id,
+            ]);
 
         $genre->books()->attach($books->pluck('id'));
 
         $response = $this->actingAs($user)
-        ->get("/genres/{$genre->id}");
+            ->get("/genres/{$genre->id}");
 
         $response->assertStatus(200);
 
@@ -71,12 +72,13 @@ class GenreControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get("/genres/{$genre->id}?page=2");
         $response->assertViewHas('books', function ($favorites) {
-            return $favorites->count() === 5; //シーダーの3、ファクトリーの12で計15のダミーデータが存在している
+            return $favorites->count() === 5; // シーダーの3、ファクトリーの12で計15のダミーデータが存在している
         });
-        
+
     }
 
-    public function test_Genre_show_ridirect(): void{
+    public function test_genre_show_ridirect(): void
+    {
 
         $genre = Genre::with('books')->first();
         $books = $genre->books->first();
@@ -84,23 +86,24 @@ class GenreControllerTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-    public function test_Genre_create(): void
+    public function test_genre_create(): void
     {
         $user = User::first();
 
-        $response = $this->actingAs($user)->get("/genres/create");
+        $response = $this->actingAs($user)->get('/genres/create');
         $response->assertStatus(200);
         $response->assertViewIs('genres.create');
 
         $response->assertSee('ジャンル名');
     }
 
-    public function test_Genre_create_redirect(): void{
+    public function test_genre_create_redirect(): void
+    {
         $response = $this->get('/genres/create');
         $response->assertRedirect('/login');
     }
 
-    public function test_Genre_store(): void
+    public function test_genre_store(): void
     {
         $user = User::first();
         $genre = ([
@@ -108,22 +111,22 @@ class GenreControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)
-        ->post("/genres",$genre);
+            ->post('/genres', $genre);
 
         $response->assertRedirect('/genres');
         $response->assertStatus(302);
-      
+
         $this->assertDatabaseHas('genres', ['name' => 'test']);
         $response->assertSessionHas('success', 'ジャンルを登録しました');
     }
 
-    public function test_Genre_edit(): void
+    public function test_genre_edit(): void
     {
         $user = User::first();
         $genre = Genre::first();
 
         $response = $this->actingAs($user)
-        ->get("/genres/{$genre->id}/edit");
+            ->get("/genres/{$genre->id}/edit");
 
         $response->assertStatus(200);
         $response->assertViewIs('genres.edit');
@@ -132,13 +135,14 @@ class GenreControllerTest extends TestCase
         $response->assertSee($genre->comment);
     }
 
-    public function test_Genre_edit_ridirect(): void{
+    public function test_genre_edit_ridirect(): void
+    {
         $genre = Genre::first();
         $response = $this->get("/genres/{$genre->id}/edit");
         $response->assertRedirect('/login');
     }
 
-    public function test_Genre_update(): void
+    public function test_genre_update(): void
     {
         $user = User::first();
         $genre = Genre::first();
@@ -148,7 +152,7 @@ class GenreControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)
-        ->put("/genres/{$genre->id}",$update_genre);
+            ->put("/genres/{$genre->id}", $update_genre);
 
         $response->assertStatus(302);
         $response->assertRedirect('/genres');
@@ -158,32 +162,32 @@ class GenreControllerTest extends TestCase
         $response->assertSessionHas('success', 'ジャンルを更新しました');
     }
 
-    public function test_Genre_cannot_delete(): void
+    public function test_genre_cannot_delete(): void
     {
         $book = Book::all();
         $user = User::first();
         $genre = Genre::whereHas('books')->first();
-    
+
         $response = $this->actingAs($user)
-        ->delete("/genres/{$genre->id}");
+            ->delete("/genres/{$genre->id}");
 
         $this->assertDatabaseHas('genres', ['id' => $genre->id]);
-        
+
         $response->assertStatus(302);
         $response->assertRedirect('/genres');
     }
 
-    public function test_Genre_can_delete(): void
+    public function test_genre_can_delete(): void
     {
         $book = Book::all();
         $user = User::first();
         $genre = Genre::whereDoesntHave('books')->first();
 
         $response = $this->actingAs($user)
-        ->delete("/genres/{$genre->id}");
-    
+            ->delete("/genres/{$genre->id}");
+
         $this->assertDatabaseMissing('genres', ['id' => $genre->id]);
-        
+
         $response->assertStatus(302);
         $response->assertRedirect('/genres');
     }

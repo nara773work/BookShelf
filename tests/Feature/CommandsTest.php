@@ -2,30 +2,29 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Notification;
-use App\Models\User;
+use App\Enums\ReadingPlanStatus;
 use App\Models\Book;
 use App\Models\ReadingPlan;
-use App\Enums\ReadingPlanStatus;
-use App\Notifications\ReminderNotification;
+use App\Models\User;
 use App\Notifications\ExpiredNotification;
+use App\Notifications\ReminderNotification;
 use Carbon\Carbon;
-
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
+use Tests\TestCase;
 
 class CommandsTest extends TestCase
 {
     /**
      * A basic feature test example.
      */
-
     use RefreshDatabase;
+
     protected $seed = true;
 
     public function test_command_runs_successfully_reminder()
     {
-        //reminder通知が送られるか
+        // reminder通知が送られるか
         Notification::fake();
 
         $user = User::first();
@@ -39,7 +38,7 @@ class CommandsTest extends TestCase
         ]);
 
         $this->artisan('books:reminder')
-        ->assertExitCode(0);
+            ->assertExitCode(0);
 
         Notification::assertSentTo($user, ReminderNotification::class);
 
@@ -51,7 +50,7 @@ class CommandsTest extends TestCase
 
     public function test_command_runs_successfully_expierd()
     {
-        //期限切れになるかのテスト、期限切れ通知が送られるか
+        // 期限切れになるかのテスト、期限切れ通知が送られるか
         Notification::fake();
 
         $user = User::first();
@@ -65,7 +64,7 @@ class CommandsTest extends TestCase
         ]);
 
         $this->artisan('books:expired')
-        ->assertExitCode(0);
+            ->assertExitCode(0);
 
         Notification::assertSentTo($user, ExpiredNotification::class);
 

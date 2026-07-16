@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('type');
-            $table->morphs('notifiable');
+            $table->morphs('notifiable'); // 受信者
             $table->json('data');
-            $table->timestamp('read_at')->nullable();
+            $table->timestamp('read_at')->nullable(); // 既読状態
             $table->timestamps();
         });
     }

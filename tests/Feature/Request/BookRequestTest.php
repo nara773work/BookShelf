@@ -2,14 +2,15 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\Genre;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class BookRequestTest extends TestCase
 {
     use RefreshDatabase;
+
     protected $seed = true;
 
     public function test_required_validation_errors(): void
@@ -54,7 +55,7 @@ class BookRequestTest extends TestCase
             ->post('/books', $data);
 
         $response->assertSessionHasErrors([
-            'title'
+            'title',
         ]);
 
         // author 101文字
@@ -64,8 +65,8 @@ class BookRequestTest extends TestCase
         $response = $this->actingAs($user)
             ->post('/books', $data);
 
-        $response->assertSessionHasErrors([      
-           'author',
+        $response->assertSessionHasErrors([
+            'author',
         ]);
 
     }
@@ -90,7 +91,6 @@ class BookRequestTest extends TestCase
         $response->assertSessionHasErrors([
             'isbn',
         ]);
-
 
         // 14桁
         $data['isbn'] = str_repeat('1', 14);
@@ -125,5 +125,4 @@ class BookRequestTest extends TestCase
             'isbn',
         ]);
     }
-    
 }

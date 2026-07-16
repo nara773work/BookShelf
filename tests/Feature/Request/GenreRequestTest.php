@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\Genre;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class GenreRequestTest extends TestCase
 {
     use RefreshDatabase;
+
     protected $seed = true;
 
     public function test_required_validation_errors(): void
@@ -42,7 +42,7 @@ class GenreRequestTest extends TestCase
             ->post('/genres', $data);
 
         $response->assertSessionHasErrors([
-            'name'
+            'name',
         ]);
-    }  
+    }
 }

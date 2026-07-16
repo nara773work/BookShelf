@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Genre;
+use Illuminate\Database\Seeder;
 
 class GenreSeeder extends Seeder
 {
@@ -13,35 +12,35 @@ class GenreSeeder extends Seeder
      */
     public function run(): void
     {
-        Genre::firstOrCreate([                  
+        Genre::firstOrCreate([
             'name' => '小説',
         ]);
-        Genre::firstOrCreate([                  
+        Genre::firstOrCreate([
             'name' => 'ビジネス',
- 
+
         ]);
-        Genre::firstOrCreate([                  
+        Genre::firstOrCreate([
             'name' => '技術書',
         ]);
-        Genre::firstOrCreate([                  
+        Genre::firstOrCreate([
             'name' => '自己啓発',
         ]);
-        Genre::firstOrCreate([                  
+        Genre::firstOrCreate([
             'name' => 'エッセイ',
         ]);
-        Genre::firstOrCreate([                  
+        Genre::firstOrCreate([
             'name' => '歴史',
         ]);
-        Genre::firstOrCreate([                  
+        Genre::firstOrCreate([
             'name' => '科学',
         ]);
-        Genre::firstOrCreate([                  
+        Genre::firstOrCreate([
             'name' => '芸術',
         ]);
-        Genre::firstOrCreate([                  
+        Genre::firstOrCreate([
             'name' => '料理',
         ]);
-        Genre::firstOrCreate([                  
+        Genre::firstOrCreate([
             'name' => '旅行',
         ]);
     }

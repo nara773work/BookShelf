@@ -18,19 +18,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-use App\Http\Controllers\Api\v1\BookController;
 use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\BookController;
 
 Route::prefix('v1')->group(function () {
 
-    Route::get('/books', [BookController::class,'index'])->name('book.index')->name('books.index');
+    Route::get('/books', [BookController::class, 'index'])->name('book.index')->name('books.index');
     Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/books', [BookController::class, 'store']);
-        Route::put('/books/{book}',[BookController::class, 'update']);
+        Route::put('/books/{book}', [BookController::class, 'update']);
         Route::delete('/books/{book}', [BookController::class, 'destroy']);
-     });
+    });
 });
 
 Route::prefix('v1')->group(function () {

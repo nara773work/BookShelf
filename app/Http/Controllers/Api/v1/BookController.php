@@ -3,30 +3,30 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Book;
-use App\Http\Resources\BookResource;
 use App\Http\Requests\BookRequest;
+use App\Http\Requests\FilterRequest;
+use App\Http\Resources\BookResource;
+use App\Models\Book;
 
 class BookController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(FilterRequest $request)
     {
         $query = Book::query();
 
         $query->withCount('reviews')
-              ->withAvg('reviews', 'rating')
-              ->with('genres');
+            ->withAvg('reviews', 'rating')
+            ->with('genres');
 
-        if($request->filled('keyword')){
+        if ($request->filled('keyword')) {
             $keyword = $request->keyword;
 
-            $query->where(function($q) use($keyword) {
+            $query->where(function ($q) use ($keyword) {
                 $q->where('title', 'like', "%{$keyword}%")
-                  ->orWhere('author', 'like', "%{$keyword}%");
+                    ->orWhere('author', 'like', "%{$keyword}%");
             });
         }
 
@@ -36,16 +36,16 @@ class BookController extends Controller
             });
         }
 
-        if($request->sort === 'title'){
+        if ($request->sort === 'title') {
             $query->orderBy('title');
         }
 
         $books = $query->paginate(10);
 
         return BookResource::collection($books)
-        ->additional(['message' => '書籍一覧の取得に成功しました'])
-        ->response()
-        ->setStatusCode(200);
+            ->additional(['message' => '書籍一覧の取得に成功しました'])
+            ->response()
+            ->setStatusCode(200);
     }
 
     /**
@@ -60,21 +60,21 @@ class BookController extends Controller
             'published_date' => $request->published_date,
             'description' => $request->description,
             'image_url' => $request->image_url,
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
         ]);
 
         $book->genres()->attach($request->genres);
 
-        if ($book->user_id !== auth()->id()) {      
+        if ($book->user_id !== auth()->id()) {
             return response()->json([
-                'message' => 'ログインしてください'
+                'message' => 'ログインしてください',
             ], 401);
         }
 
         return (new BookResource($book))
-        ->additional(['message' => '書籍の登録に成功しました'])
-        ->response()
-        ->setStatusCode(201);
+            ->additional(['message' => '書籍の登録に成功しました'])
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -82,19 +82,19 @@ class BookController extends Controller
      */
     public function show(string $id)
     {
-        $book = Book::with(['genres','reviews'])
-        ->find($id);
-        
-        if (!$book) {
+        $book = Book::with(['genres', 'reviews'])
+            ->find($id);
+
+        if (! $book) {
             return response()->json([
-                'message' => '書籍が存在しません'
+                'message' => '書籍が存在しません',
             ], 404);
         }
 
         return (new BookResource($book))
-        ->additional(['message' => '書籍の詳細取得に成功しました'])
-        ->response()
-        ->setStatusCode(200);
+            ->additional(['message' => '書籍の詳細取得に成功しました'])
+            ->response()
+            ->setStatusCode(200);
     }
 
     /**
@@ -102,18 +102,18 @@ class BookController extends Controller
      */
     public function update(BookRequest $request, string $id)
     {
-        $book = Book::with(['genres','reviews'])
-        ->find($id);
+        $book = Book::with(['genres', 'reviews'])
+            ->find($id);
 
-        if (!$book) {
+        if (! $book) {
             return response()->json([
-                'message' => '書籍が存在しません'
+                'message' => '書籍が存在しません',
             ], 404);
         }
 
-        if ($book->user_id !== auth()->id()) {      
+        if ($book->user_id !== auth()->id()) {
             return response()->json([
-                'message' => 'この操作を行う権限がありません'
+                'message' => 'この操作を行う権限がありません',
             ], 403);
         }
 
@@ -129,9 +129,9 @@ class BookController extends Controller
         $book->genres()->sync($request->genres);
 
         return (new BookResource($book))
-        ->additional(['message' => '書籍の更新に成功しました'])
-        ->response()
-        ->setStatusCode(200);
+            ->additional(['message' => '書籍の更新に成功しました'])
+            ->response()
+            ->setStatusCode(200);
     }
 
     /**
@@ -139,20 +139,20 @@ class BookController extends Controller
      */
     public function destroy(string $id)
     {
-        $book = Book::with(['genres','reviews'])
-        ->find($id);
+        $book = Book::with(['genres', 'reviews'])
+            ->find($id);
 
-        if (!$book) {
-        return response()->json([
-            'message' => '書籍が存在しません'
-        ], 404);
-    }
+        if (! $book) {
+            return response()->json([
+                'message' => '書籍が存在しません',
+            ], 404);
+        }
 
-    if ($book->user_id !== auth()->id()) {
-        return response()->json([
-        'message' => 'この操作を行う権限がありません'
-        ], 403);
-    }
+        if ($book->user_id !== auth()->id()) {
+            return response()->json([
+                'message' => 'この操作を行う権限がありません',
+            ], 403);
+        }
 
         $book->delete();
 

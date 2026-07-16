@@ -2,11 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use App\Models\User;
 use App\Models\Review;
-use App\Models\ReviewLike;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class ReviewLikeSeeder extends Seeder
 {
@@ -18,9 +16,8 @@ class ReviewLikeSeeder extends Seeder
         $reviews = Review::all();
         $users = User::all();
 
-        foreach($reviews as $review)
-        {   //自分以外のユーザーIDを取得
-            $userId = $users->where('id', '!=', $review->user_id)->pluck('id')->toArray();     
+        foreach ($reviews as $review) {   // 自分以外のユーザーIDを取得
+            $userId = $users->where('id', '!=', $review->user_id)->pluck('id')->toArray();
 
             $likeCount = rand(0, 3);
 
@@ -29,12 +26,12 @@ class ReviewLikeSeeder extends Seeder
             }
 
             $randomUserIds = collect($userId)
-            ->shuffle()
-            ->take($likeCount)
-            ->toArray();
+                ->shuffle()
+                ->take($likeCount)
+                ->toArray();
 
             $review->likedByUsers()
-            ->syncWithoutDetaching($randomUserIds);
-        }   
+                ->syncWithoutDetaching($randomUserIds);
+        }
     }
 }

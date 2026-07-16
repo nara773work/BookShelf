@@ -15,31 +15,31 @@ class BookResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            //共通
+            // 共通
             'id' => $this->id,
             'title' => $this->title,
-            'author'=>$this->author,
-            'isbn'=>$this->isbn,
+            'author' => $this->author,
+            'isbn' => $this->isbn,
             'published_date' => $this->published_date,
             'description' => $this->description,
             'image_url' => $this->image_url,
-            'genres'=> $this->genres->pluck('name'),
-            
-            //indexでのみ取得
-            'reviews_avg_rating'=>$this->when($request->is('api/v1/books'), $this->reviews_avg_rating),
-            'reviews_count'=>$this->when($request->is('api/v1/books'), $this->reviews_count),
-            
-            //showでのみ取得
+            'genres' => $this->genres->pluck('name'),
+
+            // indexでのみ取得
+            'reviews_avg_rating' => $this->when($request->is('api/v1/books'), $this->reviews_avg_rating),
+            'reviews_count' => $this->when($request->is('api/v1/books'), $this->reviews_count),
+
+            // showでのみ取得
             'reviews' => $this->when($request->is('api/v1/books/*'), function () {
                 return $this->reviews->map(function ($review) {
                     return [
-                    'user_name' => $review->user->name,
-                    'rating' => $review->rating,
-                    'comment' => $review->comment,
-                    'created_at' => optional($review->created_at)->format('Y-m-d'),
-                    'updated_at' => optional($review->updated_at)->format('Y-m-d'),
-                ];
-            });
+                        'user_name' => $review->user->name,
+                        'rating' => $review->rating,
+                        'comment' => $review->comment,
+                        'created_at' => optional($review->created_at)->format('Y-m-d'),
+                        'updated_at' => optional($review->updated_at)->format('Y-m-d'),
+                    ];
+                });
             }),
 
             'created_at' => $this->created_at->format('Y-m-d'),

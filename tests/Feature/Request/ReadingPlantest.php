@@ -2,13 +2,12 @@
 
 namespace Tests\Feature\Request;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\ReadingPlan;
-use Carbon\Carbon;
-use App\Models\User;
 use App\Models\Book;
+use App\Models\ReadingPlan;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ReadingPlantest extends TestCase
 {
@@ -16,6 +15,7 @@ class ReadingPlantest extends TestCase
      * A basic feature test example.
      */
     use RefreshDatabase;
+
     protected $seed = true;
 
     public function test_required_validation_post_date(): void
@@ -25,49 +25,50 @@ class ReadingPlantest extends TestCase
 
         $data = [
             'book_id' => $book->id,
-            'target_date' => Carbon::yesterday()
-        ];//postのときだけ過去の日付は選べない
+            'target_date' => Carbon::yesterday(),
+        ]; // postのときだけ過去の日付は選べない
 
         $response = $this->actingAs($user)
             ->post('/readingPlans', $data);
 
         $response->assertSessionHasErrors([
-            'target_date'
-        ]); 
+            'target_date',
+        ]);
     }
 
-    public function test_required_validation_post_book(): void{
+    public function test_required_validation_post_book(): void
+    {
         $user = User::first();
 
         $data = [
             'book_id' => '',
-            'target_date' =>  Carbon::today()->addDays(3)
+            'target_date' => Carbon::today()->addDays(3),
         ];
 
         $response = $this->actingAs($user)
             ->post('/readingPlans', $data);
 
         $response->assertSessionHasErrors([
-            'book_id'
+            'book_id',
         ]);
     }
 
-
-    public function test_required_validation_put_date(): void{
+    public function test_required_validation_put_date(): void
+    {
         $readingPlan = ReadingPlan::first();
         $user = User::first();
         $book = Book::first();
 
         $data = [
             'book_id' => $book->id,
-            'target_date' =>  Carbon::yesterday()
+            'target_date' => Carbon::yesterday(),
         ];
 
         $response = $this->actingAs($user)
             ->put("/readingPlans/{$readingPlan->id}", $data);
 
         $response->assertSessionHasErrors([
-            'target_date'
+            'target_date',
         ]);
     }
 }

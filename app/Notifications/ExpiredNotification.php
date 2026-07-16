@@ -3,8 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class ExpiredNotification extends Notification
@@ -36,8 +34,8 @@ class ExpiredNotification extends Notification
     {
         return [
             'type' => 'Expired',
-            'title' =>'期限切れ',
-            'body' =>'『'. $this->book->title .'』'. 'の期日が過ぎました',
+            'title' => '期限切れ',
+            'body' => '『'.$this->book->title.'』'.'の期日が過ぎました',
             'book_id' => $this->book->id,
         ];
     }

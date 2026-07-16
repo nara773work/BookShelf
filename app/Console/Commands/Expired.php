@@ -2,11 +2,12 @@
 
 namespace App\Console\Commands;
 
-use Carbon\Carbon;
-use Illuminate\Console\Command;
+use App\Enums\ReadingPlanStatus;
 use App\Models\ReadingPlan;
 use App\Notifications\ExpiredNotification;
-use App\Enums\ReadingPlanStatus;
+use Carbon\Carbon;
+use Illuminate\Console\Command;
+
 class Expired extends Command
 {
     /**
@@ -32,18 +33,18 @@ class Expired extends Command
         $today = Carbon::today();
 
         ReadingPlan::whereDate('target_date', '<', $today)
-        ->whereIn('status', [
-            ReadingPlanStatus::Reading->value,
-        ])
-        ->update([
-            'status' => ReadingPlanStatus::Expired,
-        ]);
+            ->whereIn('status', [
+                ReadingPlanStatus::Reading->value,
+            ])
+            ->update([
+                'status' => ReadingPlanStatus::Expired,
+            ]);
 
         $plans = ReadingPlan::whereDate('target_date', '<', $today)
-        ->where('status', ReadingPlanStatus::Expired->value)
-        ->get();
+            ->where('status', ReadingPlanStatus::Expired->value)
+            ->get();
 
-        //logを出力する、成功失敗もわかるようにするとよい
+        // logを出力する、成功失敗もわかるようにするとよい
         foreach ($plans as $plan) {
             if ($plan->reminded_at) {
                 continue;
@@ -51,7 +52,7 @@ class Expired extends Command
 
             $plan->update([
                 'status' => ReadingPlanStatus::Expired,
-                'reminded_at' => now()
+                'reminded_at' => now(),
             ]);
 
             $plan->user->notify(
@@ -61,9 +62,6 @@ class Expired extends Command
         }
 
         $this->info('Expired notifications sent.');
-        
+
     }
 }
-
-
-

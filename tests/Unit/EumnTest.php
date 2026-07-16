@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use App\Enums\ReadingPlanStatus;
+use PHPUnit\Framework\TestCase;
 
 class EumnTest extends TestCase
 {

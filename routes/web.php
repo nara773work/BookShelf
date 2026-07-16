@@ -1,107 +1,97 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
-use App\Http\Controllers\RankingController;
 use App\Http\Controllers\FavoriteController;
-use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\GenreController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\RankingController;
 use App\Http\Controllers\ReadingPlanController;
 use App\Http\Controllers\ReportController;
-use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ReviewController;
+use Illuminate\Support\Facades\Route;
 
+// nonactive
+// publiced
+Route::get('/books', [BookController::class, 'index'])->name('books.index');
+Route::get('/ranking', [RankingController::class, 'index'])->name('ranking.index');
 
-//nonactive
-//publiced
-Route::get('/books',[BookController::class,'index'])->name('books.index');
-Route::get('/ranking',[RankingController::class,'index'])->name('ranking.index');
-
-
-//authed
-//report
+// authed
+// report
 Route::middleware('auth')
-->group(function () {
-    Route::get('/reports', [ReportController::class,'index'])->name('reports.index');
-});
+    ->group(function () {
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    });
 
-
-//reading
+// reading
 Route::middleware('auth')
-->group(function () {
-    Route::get('/reading-plans', [ReadingPlanController::class,'index'])->name('reading-plans.index');
-    Route::get('/reading-plans/create', [ReadingPlanController::class,'create'])->name('reading-plans.create');
-    Route::post('/reading-plans', [ReadingPlanController::class,'store'])->name('reading-plans.store');
-    Route::get('/reading-plans/{plan}/edit', [ReadingPlanController::class,'edit'])->name('reading-plans.edit');
-    Route::post('/reading-plans/{plan}/complete', [ReadingPlanController::class,'complete'])->name('reading-plans.complete');
-    Route::put('/reading-plans/{plan}', [ReadingPlanController::class,'update'])->name('reading-plans.update');
-    Route::delete('/reading-plans/{plan}', [ReadingPlanController::class,'destroy'])->name('reading-plans.destroy');
-});
+    ->group(function () {
+        Route::get('/reading-plans', [ReadingPlanController::class, 'index'])->name('reading-plans.index');
+        Route::get('/reading-plans/create', [ReadingPlanController::class, 'create'])->name('reading-plans.create');
+        Route::post('/reading-plans', [ReadingPlanController::class, 'store'])->name('reading-plans.store');
+        Route::get('/reading-plans/{plan}/edit', [ReadingPlanController::class, 'edit'])->name('reading-plans.edit');
+        Route::post('/reading-plans/{plan}/complete', [ReadingPlanController::class, 'complete'])->name('reading-plans.complete');
+        Route::put('/reading-plans/{plan}', [ReadingPlanController::class, 'update'])->name('reading-plans.update');
+        Route::delete('/reading-plans/{plan}', [ReadingPlanController::class, 'destroy'])->name('reading-plans.destroy');
+    });
 
-//notifications
+// notifications
 Route::middleware('auth')
-->group(function () {
-    Route::get('/notifications', [NotificationController::class,'index'])->name('notifications.index');
-    Route::post('/notifications/{id}/read', [NotificationController::class,'read'])->name('notifications.read');
-});
+    ->group(function () {
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::post('/notifications/{id}/read', [NotificationController::class, 'read'])->name('notifications.read');
+    });
 
-//book　新規登録
+// book　新規登録
 Route::middleware('auth')->group(function () {
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
-    Route::post('/books',[BookController::class,'store'])->name('books.store');
+    Route::post('/books', [BookController::class, 'store'])->name('books.store');
 
-//ISBN 
-    Route::get('/books/isbn/{isbn}',[BookController::class,'isbn']);
+    // ISBN
+    Route::get('/books/isbn/{isbn}', [BookController::class, 'isbn']);
 });
 
-
-//genres 新規登録
+// genres 新規登録
 Route::middleware('auth')
-->group(function () {
-    Route::get('/genres', [GenreController::class, 'index'])->name('genres.index');
-    Route::get('/genres/create', [GenreController::class, 'create'])->name('genres.create');
-    Route::post('/genres', [GenreController::class, 'store'])->name('genres.store');
+    ->group(function () {
+        Route::get('/genres', [GenreController::class, 'index'])->name('genres.index');
+        Route::get('/genres/create', [GenreController::class, 'create'])->name('genres.create');
+        Route::post('/genres', [GenreController::class, 'store'])->name('genres.store');
     });
 
-
-//favorite 
+// favorite
 Route::middleware('auth')
-->group(function () {
-    Route::get('/favorites', [FavoriteController::class,'index'])->name('favorites.index');
-    });    
+    ->group(function () {
+        Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    });
 
+// active
+// public 詳細画面
+Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
 
-//active
-//public 詳細画面
-Route::get('/books/{book}',[BookController::class,'show'])->name('books.show');
-
-
-//book お気に入り登録、編集
+// book お気に入り登録、編集
 Route::middleware('auth')->group(function () {
-    Route::post('/books/{book}/favorites', [BookController::class,'toggle'])->name('favorites.toggle');
+    Route::post('/books/{book}/favorites', [BookController::class, 'toggle'])->name('favorites.toggle');
     Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
-    Route::put('/books/{book}',[BookController::class,'update'])->name('books.update');
-    Route::delete('/books/{book}',[BookController::class,'destroy'])->name('books.destroy');
-    });
+    Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
+    Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
+});
 
-
-//genres 
+// genres
 Route::middleware('auth')
-->group(function () {
-    Route::get('/genres/{genre}', [GenreController::class, 'show'])->name('genres.show');
-    Route::get('/genres/{genre}/edit', [GenreController::class,'edit'])->name('genres.edit');
-    Route::put('/genres/{genre}',[GenreController::class,'update'])->name('genres.update');
-    Route::delete('/genres/{genre}',[GenreController::class,'destroy'])->name('genres.destroy');
+    ->group(function () {
+        Route::get('/genres/{genre}', [GenreController::class, 'show'])->name('genres.show');
+        Route::get('/genres/{genre}/edit', [GenreController::class, 'edit'])->name('genres.edit');
+        Route::put('/genres/{genre}', [GenreController::class, 'update'])->name('genres.update');
+        Route::delete('/genres/{genre}', [GenreController::class, 'destroy'])->name('genres.destroy');
     });
 
-
-//review いいね
+// review いいね
 Route::middleware('auth')
-->group(function () {
-    Route::post('/reviews/{review}/like', [ReviewController::class,'toggle'])->name('reviews.like');
+    ->group(function () {
+        Route::post('/reviews/{review}/like', [ReviewController::class, 'toggle'])->name('reviews.like');
 
-    Route::post('/books/{book}/reviews', [ReviewController::class,'store'])->name('reviews.store');
-    Route::get('/reviews/{review}/edit',[ReviewController::class,'edit'])->name('reviews.edit');
-    Route::put('/reviews/{review}/', [ReviewController::class,'update'])->name('reviews.update');
-    Route::delete('/reviews/{review}/', [ReviewController::class,'destroy'])->name('reviews.destroy');
+        Route::post('/books/{book}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+        Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
+        Route::put('/reviews/{review}/', [ReviewController::class, 'update'])->name('reviews.update');
+        Route::delete('/reviews/{review}/', [ReviewController::class, 'destroy'])->name('reviews.destroy');
     });
-

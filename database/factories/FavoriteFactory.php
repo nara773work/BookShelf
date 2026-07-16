@@ -2,13 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use App\Models\Book;
 use App\Models\Favorite;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Favorite>
+ * @extends Factory<Favorite>
  */
 class FavoriteFactory extends Factory
 {
@@ -17,7 +16,6 @@ class FavoriteFactory extends Factory
      *
      * @return array<string, mixed>
      */
-
     protected $model = Favorite::class;
 
     public function definition(): array
@@ -26,6 +24,4 @@ class FavoriteFactory extends Factory
             'book_id' => Book::factory(),
         ];
     }
-
-     
 }

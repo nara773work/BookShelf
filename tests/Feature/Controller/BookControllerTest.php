@@ -2,39 +2,40 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Models\Book;
-use App\Models\User;
 use App\Models\Genre;
 use App\Models\Review;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class BookControllerTest extends TestCase
 {
     use RefreshDatabase;
+
     protected $seed = true;
 
-    public function test_Book_index(): void
+    public function test_book_index(): void
     {
         $user = User::first();
 
-        //ゲストユーザーのアクセス
+        // ゲストユーザーのアクセス
         $response = $this->get('/books');
         $response->assertStatus(200);
         $response->assertViewIs('books.index');
 
-        //認証済みユーザーのアクセス
+        // 認証済みユーザーのアクセス
         $response = $this->actingAs($user)
-        ->get('/books');
+            ->get('/books');
         $response->assertStatus(200);
         $response->assertViewIs('books.index');
     }
 
-    public function test_Book_index_paginate(): void{
+    public function test_book_index_paginate(): void
+    {
         $response = $this->get('/books');
 
-        //ページネーションされているかテストする
+        // ページネーションされているかテストする
         // 1ページ目に10件、2ページ目に1件（11件ダミーデータあり）
         $response->assertViewHas('books', function ($books) {
             return $books->count() === 10;
@@ -46,26 +47,28 @@ class BookControllerTest extends TestCase
         });
     }
 
-    public function test_Book_index_view_genre(): void{
+    public function test_book_index_view_genre(): void
+    {
         $book = Book::first();
-        $genre = $book->genres->first();;
+        $genre = $book->genres->first();
 
         $response = $this->get('/books');
 
-        //各書籍に紐づいているジャンルが表示されている
+        // 各書籍に紐づいているジャンルが表示されている
         $response->assertViewHas('books', function ($books) {
             foreach ($books as $book) {
                 if ($book->genres->isEmpty()) {
                     return false;
                 }
             }
+
             return true;
         });
 
         $response->assertSee($genre->name);
     }
 
-    public function test_Book_index_fillter(): void
+    public function test_book_index_fillter(): void
     {
         $book = Book::where('title', '吾輩は猫である')->first();
 
@@ -92,35 +95,37 @@ class BookControllerTest extends TestCase
         $response->assertDontSee('Clean Code');
     }
 
-    public function test_Book_index_genre_fillter(): void{
-        $genres = Genre::first();//検索でジャンル=1を選択
-        $keyword = $genres->books()->get();//検索したジャンルを持つ書籍を取得
+    public function test_book_index_genre_fillter(): void
+    {
+        $genres = Genre::first(); // 検索でジャンル=1を選択
+        $keyword = $genres->books()->get(); // 検索したジャンルを持つ書籍を取得
 
         $response = $this->get('/books?genre=1');
         $response->assertStatus(200);
         $response->assertViewIs('books.index');
         $response->assertSee($genres->name);
         $response->assertViewHas('books', function ($books) {
-            return $books->count() === 3; 
+            return $books->count() === 3;
         });
 
         $author = Book::where('author', '夏目漱石')->first();
 
-        //検索条件が重なっても絞り込める
+        // 検索条件が重なっても絞り込める
         $response = $this->get('/books?keyword=夏&genre=1');
         $response->assertStatus(200);
         $response->assertViewIs('books.index');
         $response->assertSee($author->author);
         $response->assertSee($genres->name);
         $response->assertViewHas('books', function ($books) {
-            return $books->count() === 2; 
+            return $books->count() === 2;
         });
     }
 
-    public function test_Book_index_sort(): void{
+    public function test_book_index_sort(): void
+    {
         $books = Book::all();
 
-        //title順に並び替え
+        // title順に並び替え
         $response = $this->get('/books?sort=title');
         $response->assertViewIs('books.index');
         $response->assertViewHas('books', function ($books) {
@@ -133,15 +138,16 @@ class BookControllerTest extends TestCase
             return $ratings->toArray() === $ratings->sortDesc()->values()->toArray();
         });
 
-        //評価順に表示
+        // 評価順に表示
         $response = $this->get('/books?sort=rating');
         $response->assertViewIs('books.index');
     }
 
-    public function test_Book_index_paginate_keep(): void{
+    public function test_book_index_paginate_keep(): void
+    {
         $response = $this->get('/books?sort=rating');
 
-        //ページネーションされているかテストする
+        // ページネーションされているかテストする
         // 1ページ目に10件、2ページ目に1件（11件ダミーデータあり）
         $response->assertViewHas('books', function ($books) {
             return $books->count() === 10;
@@ -154,14 +160,16 @@ class BookControllerTest extends TestCase
         });
 
         $response->assertViewHas('books', function ($books) {
-        $ratings = $books->pluck('reviews_avg_rating')
-            ->filter()
-            ->values();
+            $ratings = $books->pluck('reviews_avg_rating')
+                ->filter()
+                ->values();
+
             return $ratings->toArray() === $ratings->sortDesc()->values()->toArray();
         });
     }
 
-    public function test_Book_show(): void{
+    public function test_book_show(): void
+    {
         $book = Book::first();
         $response = $this->get("/books/{$book->id}");
         $genres = $book->genres()->first();
@@ -184,12 +192,12 @@ class BookControllerTest extends TestCase
         $response->assertSee($reviewLikes);
     }
 
-    public function test_Book_create(): void
+    public function test_book_create(): void
     {
         $user = User::first();
         $genres = Genre::all();
 
-        $response = $this->actingAs($user)->get("/books/create");
+        $response = $this->actingAs($user)->get('/books/create');
 
         $response->assertSee('タイトル');
         $response->assertSee('著者');
@@ -206,13 +214,13 @@ class BookControllerTest extends TestCase
         $response->assertViewIs('books.create');
     }
 
-    public function test_Book_create_redirect(): void
+    public function test_book_create_redirect(): void
     {
-        $response = $this->get("/books/create");
+        $response = $this->get('/books/create');
         $response->assertRedirect('/login');
     }
 
-    public function test_Book_store(): void
+    public function test_book_store(): void
     {
         $user = User::first();
         $genres = Genre::take(2)->get();
@@ -227,79 +235,80 @@ class BookControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)
-        ->post("/books",$book);
+            ->post('/books', $book);
 
         $response->assertSessionHas('success', '書籍を登録しました');
 
         $response->assertRedirect('/books');
-      
+
         $this->assertDatabaseHas('books',
-        ['isbn' => 0000000000000]);
+            ['isbn' => 0000000000000]);
 
         $book = Book::where('isbn', '0000000000000')->first();
 
         $this->assertCount(2, $book->genres);
-        
-        //中間テーブルに保存されているか確認
+
+        // 中間テーブルに保存されているか確認
         foreach ($genres as $genre) {
-        $this->assertDatabaseHas('book_genre', [
-            'book_id' => $book->id,
-            'genre_id' => $genre->id,
-        ]);
-    }
+            $this->assertDatabaseHas('book_genre', [
+                'book_id' => $book->id,
+                'genre_id' => $genre->id,
+            ]);
+        }
     }
 
     public function test_toggle(): void
     {
         $user = User::first();
-        $book = Book::whereDoesntHave('favoritebooks',function ($query) use ($user) {
+        $book = Book::whereDoesntHave('favoritebooks', function ($query) use ($user) {
             $query
-            ->where('user_id', $user->id);
+                ->where('user_id', $user->id);
         })->first();
 
         $response = $this
-        ->actingAs($user)
-        ->post("/books/{$book->id}/favorites");
+            ->actingAs($user)
+            ->post("/books/{$book->id}/favorites");
 
         $response->assertRedirect();
 
         $this->assertDatabaseHas('favorites', [
-        'user_id' => $user->id,
-        'book_id' => $book->id,
+            'user_id' => $user->id,
+            'book_id' => $book->id,
         ]);
 
         $this->actingAs($user)
-        ->post("/books/{$book->id}/favorites");
+            ->post("/books/{$book->id}/favorites");
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseMissing('favorites', [
-        'user_id' => $user->id,
-        'book_id' => $book->id,
+            'user_id' => $user->id,
+            'book_id' => $book->id,
         ]);
-    
+
     }
 
-    public function test_toggle_redirect(): void{
+    public function test_toggle_redirect(): void
+    {
         $user = User::first();
-        $book = Book::whereDoesntHave('favoritebooks',function ($query) use ($user) {
+        $book = Book::whereDoesntHave('favoritebooks', function ($query) use ($user) {
             $query
-            ->where('user_id', $user->id);
+                ->where('user_id', $user->id);
         })->first();
 
         $response = $this->post("/books/{$book->id}/favorites");
         $response->assertRedirect('/login');
     }
 
-    public function test_Book_edit(): void
+    public function test_book_edit(): void
     {
         $user = User::first();
-        $book = Book::where('user_id',1)->first();
+        $book = Book::where('user_id', 1)->first();
         $genres = $book->genres()->first();
         $reviews = Review::withCount('likedByUsers')->first();
 
         $response = $this->actingAs($user)
-        ->get("/books/{$book->id}/edit");
+            ->get("/books/{$book->id}/edit");
 
         $response->assertSee($book->title);
         $response->assertSee($book->author);
@@ -315,10 +324,10 @@ class BookControllerTest extends TestCase
         $response->assertViewIs('books.edit');
     }
 
-    public function test_Book_update(): void
+    public function test_book_update(): void
     {
         $user = User::first();
-        $book = Book::where('user_id',1)->first();
+        $book = Book::where('user_id', 1)->first();
         $genres = Genre::take(10)->get();
 
         $update_book = ([
@@ -327,11 +336,11 @@ class BookControllerTest extends TestCase
             'isbn' => $book->isbn,
             'user_id' => $book->user_id,
             'published_date' => $book->published_date,
-            'genres'=> $genres->pluck('id')->toArray(),
+            'genres' => $genres->pluck('id')->toArray(),
         ]);
 
         $response = $this->actingAs($user)
-        ->put("/books/{$book->id}",$update_book);
+            ->put("/books/{$book->id}", $update_book);
 
         $response->assertSessionHas('success', '書籍を更新しました');
 
@@ -342,23 +351,23 @@ class BookControllerTest extends TestCase
         $book = Book::where('title', 'edited')->first();
 
         $this->assertCount(10, $book->genres);
-        
-        //中間テーブルに保存されているか確認
+
+        // 中間テーブルに保存されているか確認
         foreach ($genres as $genre) {
-        $this->assertDatabaseHas('book_genre', [
-            'book_id' => $book->id,
-            'genre_id' => $genre->id,
-        ]);
-    }
+            $this->assertDatabaseHas('book_genre', [
+                'book_id' => $book->id,
+                'genre_id' => $genre->id,
+            ]);
+        }
     }
 
-    public function test_Book_delete(): void
+    public function test_book_delete(): void
     {
         $user = User::first();
-        $book = Book::where('user_id',1)->first();
-    
+        $book = Book::where('user_id', 1)->first();
+
         $response = $this->actingAs($user)
-        ->delete("/books/{$book->id}");
+            ->delete("/books/{$book->id}");
 
         $response->assertRedirect('/books');
 
@@ -370,29 +379,29 @@ class BookControllerTest extends TestCase
         $response->assertSessionHas('success', '書籍を削除しました');
     }
 
-    public function test_Book_isbn_get(): void
+    public function test_book_isbn_get(): void
     {
         $user = User::first();
         $isbn = '9784488464011';
-    
+
         $response = $this->actingAs($user)
-        ->get("/books/isbn/{$isbn}");
+            ->get("/books/isbn/{$isbn}");
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
-        'title',
-        'author',
-        'published_date',
-    ]);
+            'title',
+            'author',
+            'published_date',
+        ]);
     }
 
-    public function test_Book_isbn_error(): void
+    public function test_book_isbn_error(): void
     {
         $user = User::first();
         $isbn = '1111111111111';
-    
+
         $response = $this->actingAs($user)
-        ->get("/books/isbn/{$isbn}");
+            ->get("/books/isbn/{$isbn}");
 
         $response->assertStatus(404);
     }

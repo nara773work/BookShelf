@@ -3,8 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class ReminderNotification extends Notification
@@ -36,8 +34,8 @@ class ReminderNotification extends Notification
     {
         return [
             'type' => 'remind',
-            'title' =>'リマインド通知',
-            'body' =>'『'. $this->book->title .'』'. 'の期日が残り3日になりました',
+            'title' => 'リマインド通知',
+            'body' => '『'.$this->book->title.'』'.'の期日が残り3日になりました',
             'book_id' => $this->book->id,
         ];
     }

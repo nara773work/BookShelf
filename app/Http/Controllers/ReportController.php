@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Enums\ReadingPlanStatus;
 
 use App\Models\Genre;
 
@@ -10,12 +11,13 @@ class ReportController extends Controller
     {
         $user = auth()->user();
         $reviews = $user->reviews()->with('book.genres')->get();
-        $books = $user->books()->get();
+        $plans = $user->readingPlans()->get();
+        $completedBooks = $plans->where('status',ReadingPlanStatus::Completed);
 
         $stats = [
             'summary' => [
                 'total_reviews' => $reviews->count(),
-                'books_read' => $books->count(),
+                'books_read' => $completedBooks->count(),
                 'average_rating' => $reviews->avg('rating'),
             ],
 

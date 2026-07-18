@@ -1,17 +1,17 @@
-基本情報
-プロジェクト名：BookShelf
+## 基本情報
+プロジェクト名：BookShelf 書籍管理アプリ
 
-概要
-実装機能一覧
+## 概要
+「BookShelf　書籍管理アプリ」は、書籍・レビュー・ジャンル・読書計画・レポートなどを管理できるWebアプリケーションである。
+Laravelを用いてCRUD機能、認証・認可、公開API、リマインダー通知などを実装している。
 
-基礎機能
-・認証(Fortifyを使用)
+## 基礎機能
+・認証(Laravel Fortify)
 　未認証時はbooks.index,books.show,rankingのみ閲覧可能。
-　そのほかはmiddlewearを実装しており、未認証時は/login画面にリダイレクトされる。
+　そのほかはAuth Middlewareを実装しており、未認証時は/login画面にリダイレクトされる。
 
 ・書籍CRUD,レビューCRUD,ジャンルCRUD
-　一覧画面表示(index)、新規登録(create,store)、詳細画面表示(show)、更新(update)、削除(delete)を行う。
-  BookControllerではisbn検索(isbn)ができる。
+　一覧表示(index)、新規登録(create・store)、詳細表示(show)、更新(update)、削除(destroy)を行う。
 
 ・お気に入り登録
 　BookControllerではお気に入り登録(toggle)ができる。
@@ -23,10 +23,12 @@
 　ゲストユーザーも閲覧できる。
 　平均評価が降順に表示される。(TOP10まで)
 
-・公開API（認証なしCRUD）
+・公開API
+　GET系は認証不要
+　POST / PUT / DELETE はLaravel Sanctumによる認証が必要
 　エンドポイント一覧を下記に表記。
 
-応用機能　
+## 応用機能　
 ・検索フィルタ
 　著者やタイトルに含まれる文字で検索をかけることができる。
 　ジャンルで絞り込みができる。
@@ -34,21 +36,23 @@
 　それぞれを維持したままページネーションで書籍が取得できる。
 
 ・ISBN検索(Google Books使用)
-　ISBNを入力すると書籍登録画面が自動補完される。
+　Google Books APIを利用し、ISBNを入力すると書籍情報（タイトル・著者・概要など）が自動入力される。
 
 ・マイ読書レポート
-　テストユーザーとして山田太郎(ID=1)のみダミーデータを作成。以下にその内容を示す。
+　動作確認用として山田太郎(ID=1)のみシナリオありのダミーデータを投入している。
+　認可確認用として鈴木花子(ID=2)にも1つダミーデータを投入している。
+　シーディング要件にその内容を示す。
 
 ・公開APIへの Sanctum によるトークン認証追加
 
-・読書計画書とリマインダー通知
-　ステータスが読書中、読了、期限切れ（読了にならずに日付が本日を過ぎてしまった）の3つである。
+・読書計画とリマインダー通知
+　ステータスを読書中、読了、期限切れ（読了にならずに日付が本日を過ぎてしまった）の3つに設定する。
 　期限切れになった計画を自動的に期限切れステータスへ変更。
 　期日が残り三日になった計画にリマインダー通知を、期限が過ぎてしまった計画に期限切れ通知をそれぞれ発火する。
 
-※Docsにそれぞれの詳細設計をまとめたので各機能の詳しい内容はそちらを参照。
+※docsにそれぞれの詳細設計をまとめたので各機能の詳しい内容はそちらを参照。
 
-APIエンドポイント一覧
+## APIエンドポイント一覧
 GET　/api/v1/books　　　　　　 ：書籍一覧を取得する
 GET　/api/v1/books/{book}     ：書籍詳細を取得する
 POST　/api/v1/books　　　　　　：書籍を登録する
@@ -58,11 +62,17 @@ DELETE　/api/v1/books/{book}　：書籍を削除する
 　Bearerトークン（Authorization ヘッダ）による認証方式である。
 
 認可を通す方法
-POST：http://localhost/api/v1/loginにアクセスする（bodyにメールアドレスとパスワードを入力してPOSTする）
-tokenが返ってくるので、それをヘッダーのAuthorizationの値としてBearer 1|xxxxxxxxxxxxxxxxの×部分に入力する。
-※キーにAccept、その値にapplication/json、キーにContent-Type、その値にContent-Typeに設定しておく。
+1.POST：http://localhost/api/v1/login
+2.メールアドレス・パスワードを送信
+3.レスポンスのtokenを取得
+4.Authorizationヘッダーへ設定
 
-シーディング要件
+※以下のようにヘッダーを設定しておくこと。
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {token}
+
+## シーディング要件
 ReadingPlanSeeder
 ・通知が発火するパターン、しないパターンを網羅するために
 　1.読書中で、期日まで残り2日（3日以内なのでリマインド通知発火）
@@ -72,10 +82,10 @@ ReadingPlanSeeder
 →　動作確認の効率向上のため、ID=1（山田太郎）にシナリオを集約する
    また、認可確認のためID=2(鈴木花子)にも1と同じ条件の計画を投入する
 
-ER図
+## ER図
 ![ER図](docs/ER.png)
 
-技術スタック
+## 技術スタック
 ・OS : Windows11
 ・PHP : 8.5
 ・Laravel : 10.x
@@ -83,7 +93,35 @@ ER図
 ・フロントエンド : Vite, Tailwind CSS ^3.4.0, @tailwindcss/forms
 ・開発ツール : Docker, Laravel Sail, phpMyAdmin
 
-開発者
+## 環境構築手順
+1.gitリポジトリをクローンした後、プロジェクトに移動する
+//git clone <リポジトリURL>
+//cd <プロジェクト名>
+
+2.「.env」を作成する
+//cp .env.example .env
+
+3.Composer依存パッケージをインストールする
+//composer install
+
+4.sailを起動する
+//sail up -d
+
+5.アプリケーションキーを作成する
+//./vendor/bin/sail artisan key:generate
+
+6.初期データ投入
+//sail artisan migrate:fresh --seed
+
+7.Viteを設定する
+//sail npm install
+//sail npm run dev
+こちらは常に稼働させておくこと
+
+## 環境開発URL
+http://localhost/books
+
+## 開発者
 奈良那々美
 
 

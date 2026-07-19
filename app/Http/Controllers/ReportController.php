@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Enums\ReadingPlanStatus;
 
+use App\Enums\ReadingPlanStatus;
 use App\Models\Genre;
 
 class ReportController extends Controller
@@ -12,7 +12,7 @@ class ReportController extends Controller
         $user = auth()->user();
         $reviews = $user->reviews()->with('book.genres')->get();
         $plans = $user->readingPlans()->get();
-        $completedBooks = $plans->where('status',ReadingPlanStatus::Completed);
+        $completedBooks = $plans->where('status', ReadingPlanStatus::Completed);
 
         $stats = [
             'summary' => [

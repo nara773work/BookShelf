@@ -53,6 +53,12 @@ class BookController extends Controller
      */
     public function store(BookRequest $request)
     {
+        if (! auth()->check()) {
+            return response()->json([
+                'message' => 'ログインしてください',
+            ], 401);
+        }
+
         $book = Book::create([
             'title' => $request->title,
             'author' => $request->author,
@@ -64,12 +70,6 @@ class BookController extends Controller
         ]);
 
         $book->genres()->attach($request->genres);
-
-        if ($book->user_id !== auth()->id()) {
-            return response()->json([
-                'message' => 'ログインしてください',
-            ], 401);
-        }
 
         return (new BookResource($book))
             ->additional(['message' => '書籍の登録に成功しました'])

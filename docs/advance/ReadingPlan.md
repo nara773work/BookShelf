@@ -1,5 +1,5 @@
 reading-plans
-//概要
+## 概要
 ログインユーザーの読書計画を一覧表示し、状態（未読、読書中、読了）で絞り込む
 ログインユーザーの読書計画を新規登録、更新、削除できる
 
@@ -11,7 +11,7 @@ GET /reading-plans/create　//新規登録
 GET /reading-plans/{plan}/edit　//編集
 DELETE /reading-plans/{plan}　//削除
 
-必要なもの
+## 必要なもの
 ・readingplanController
 →状態絞り込みができる、CRUD操作ができる
 
@@ -32,14 +32,14 @@ created_at・updated_at(timestmp)
 users->readinPlans 1対多
 books->readingplans 1対多
 
-//シーダー
+## シーディング要件
 山田太郎のみ作成
 book_id = 1,期日:3日後,状態:読書中(青) →　リマインダー通知来る
 book_id = 2,期日:5日後,状態:読了(緑) →　
 book_id = 3,期日:3日後,状態:読了(青)　→　
 book_id = 4,期日:昨日,状態:期限切れ(赤) →　期限切れ通知来る
 
-//バッチ処理
+## バッチ処理
 app/Console/Commands
 期限の切れた計画のステータスを期限切れに変更する→未確認
 
@@ -48,7 +48,7 @@ app/Console/Commands
 ・期日まで3日
 
 
-//ReadingPlanRequest
+## ReadingPlanRequest
 新規登録時
 書籍:requierd 書籍を選択してください
 期日:required 期日を選択してください

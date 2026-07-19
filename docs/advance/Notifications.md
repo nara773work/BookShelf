@@ -1,13 +1,13 @@
 Notifications
-//概要
+## 概要
 通知一覧を表示、既読操作ができる
 
 app/Enums/ReadingPlanStatus
-//概要
+## 概要
 ステータスを設定する
 読書中、読了、期限切れ（期日が今日を過ぎたら期限切れになる）
 
-//マイグレーション
+## マイグレーション
 uuid('id')->primary()
 string('type');
 morphs('notifiable');
@@ -16,17 +16,17 @@ timestamp('read_at')->nullable();
 timestamps();
 
 app/notifications/ExiredNotifications,ReminderNotifications
-//概要
+## 概要
 通知の中身を設定する
 
 期日切れ：期日が今日を過ぎると通知される　『タイトル』の期日が過ぎました
 リマインド：期日が残り3日になると通知される　『タイトル』の期日が残り3日になりました
 
-//URL
+## URL
 GET /notifications　通知一覧を表示
 POST /notifications/{id}/read　通知が既読化される
 
-//通知コマンド
+## 通知コマンド
 sail artisan books:expired
 sail artisan books:reminder
 

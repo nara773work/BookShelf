@@ -1,5 +1,9 @@
 APIroute
 
+ミドルウェアによって認証・認可を実装する。
+→ 更新・削除は作成者のみが実行できる。
+
+----------------------------------------------------------------------
 use App\Http\Controllers\Api\v1\BookController;
 use App\Http\Controllers\Api\v1\AuthController;
 
@@ -18,9 +22,9 @@ Route::prefix('v1')->group(function () {
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 });
+-------------------------------------------------------------------------
 
-
-APIエンドポイント一覧
+## APIエンドポイント一覧
 ・GET　/api/v1/books　　　　　　 ：書籍一覧を取得する　200
 ・GET　/api/v1/books/{book}     ：書籍詳細を取得する　200
 ・POST　/api/v1/books　　　　　　：書籍を登録する　　　201
@@ -29,7 +33,7 @@ APIエンドポイント一覧
 存在しないIDの場合、ステータスコードは404となる。
 権限不足の場合はステータスコードは403となる。
 
-API resourceの構造
+## API resourceの構造
     共通
     'id' => 書籍id
     'title' => 書籍タイトル

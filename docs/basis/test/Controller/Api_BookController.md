@@ -1,10 +1,10 @@
 BookControllerTest
-//概要
+## 概要
 Controllerに記載されている機能をテストする
 Laravel Sanctum を導入し、認証＋認可を行う
 （Bearer トークン（Authorization ヘッダ）による認証方式）
 
-test_Book_index
+## test_Book_index
 ・GETメソッドで一覧ページを表示する　
 ・書籍が10件のページネーションで表示されている
 ・各書籍に紐づくジャンル、平均評価、レビュー件数が表示されている
@@ -13,7 +13,7 @@ test_Book_index
 ・ゲストもアクセスできる
 ・認証済みユーザーもアクセスできる
 
-test_Book_show
+## test_Book_show
 ・GETメソッドで詳細ページを表示する　
 ・ジャンル情報とレビュー（レビュー投稿者、評価、コメント、投稿日）も含む
 ・IDが存在しないとき「404：書籍が存在しません」
@@ -21,7 +21,7 @@ test_Book_show
 ・書籍タイトル、著者、ISBN、出版日、説明、画像、ジャンルが表示される
 ・レスポンス形式はAPIresourceを使用している
 
-test_Book_store
+## test_Book_store
 ・POSTメソッドでデータを送信する　
 ・データがDBに保存されているか検証する
 ・DBの中間テーブルbook_genreにも保存されている
@@ -29,7 +29,7 @@ test_Book_store
 ・「201：書籍の登録に成功しました」
 ・未認証時「401」
 
-test_コントローラー名_update（認証必須）
+## test_コントローラー名_update（認証必須）
 ・PUTメソッドでデータが更新される
 ・DBが上書きされているか検証する
 ・book.index(書籍の登録)リダイレクトされる
@@ -37,7 +37,7 @@ test_コントローラー名_update（認証必須）
 ・「200：書籍の更新に成功しました」
 ・認可エラー時「403」
 
-test_コントローラー名_delete（認証必須）
+## test_コントローラー名_delete（認証必須）
 ・DELETEメソッドでデータが削除されるか
 ・DBからも削除されているか
 ・book.index(書籍の削除)リダイレクトされる

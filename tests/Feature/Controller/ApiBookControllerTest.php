@@ -14,7 +14,7 @@ class ApiBookControllerTest extends TestCase
 
     protected $seed = true;
 
-    public function test_ap_i_index(): void
+    public function test_api_index(): void
     {
         $response = $this->get('/api/v1/books');
         $response->assertStatus(200);
@@ -153,7 +153,7 @@ class ApiBookControllerTest extends TestCase
 
     }
 
-    public function test_ap_i_show(): void
+    public function test_api_show(): void
     {
         $book = Book::with(['reviews', 'genres'])
             ->withCount('reviews')
@@ -262,10 +262,10 @@ class ApiBookControllerTest extends TestCase
         $response->assertStatus(401);
     }
 
-    public function test_ap_i_update(): void
+    public function test_api_update(): void
     {
         $user = User::with('books')->first();
-        $book = $user->books->first();
+        $book = $user->books()->first();
 
         $update_book = ([
             'title' => 'edited',
@@ -300,9 +300,8 @@ class ApiBookControllerTest extends TestCase
         ]);
     }
 
-    public function test_ap_i_update_auth(): void
+    public function test_api_update_auth(): void
     {
-        $book = Book::first();
         $book = Book::first();
         $otherUser = User::where('id', '!=', $book->user_id)->first();
 

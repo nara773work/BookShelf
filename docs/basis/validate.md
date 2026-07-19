@@ -3,7 +3,7 @@ GenreRequest
 ReadingPlanRequest
 ReviewRequest
 
-ユーザー新規登録(app/CreateNewUser.php)
+## ユーザー新規登録(app/CreateNewUser.php)
     name：必須|max:50|文字列
     必須：名前を入力してください
 　  max：50字以内で入力してください
@@ -21,7 +21,7 @@ ReviewRequest
 　  max：8字以上20字以内で入力してください
     confirmed:確認用パスワードが一致しません
 
-ログイン(lang/en/auth,lang/en/validation)
+## ログイン(lang/en/auth,lang/en/validation)
     email：必須
     必須：メールアドレスを入力してください
 
@@ -30,7 +30,7 @@ ReviewRequest
 
     どちらか間違っている場合：メールアドレス、またはパスワードが正しくありません
 
-書籍登録、編集（公開APIも同様）
+## 書籍登録、編集（公開APIも同様）
     title：必須|max:150
     必須：本のタイトルを入力してください
 　  max：150字以内で入力してください
@@ -54,18 +54,18 @@ ReviewRequest
     genre：必須
 　　必須：ジャンルを選択してください
 
-検索・フィルター（エラーメッセージなし）
+## 検索・フィルター（エラーメッセージなし）
     keyword：nullable|max:255
     genre：nullable|integer|exists:genres,id
     page：nullable|integer|min:1
     per_page：nullable|integer|min:1|max:100
 
-ジャンル登録、編集（公開APIも同様）
+## ジャンル登録、編集（公開APIも同様）
 　　name：必須|max:50
 　　必須：ジャンル名を入力してください
 　　max：50字以内で入力してください
 
-レビュー登録、編集（公開APIも同様）
+## レビュー登録、編集（公開APIも同様）
 　　rating：必須|範囲
 　　必須：評価を選択してください
 　　範囲：星1～星5の範囲で選択してください
@@ -75,13 +75,13 @@ ReviewRequest
 　　→レビューでは星評価がメイン。
 　　 コメントは具体的な内容を示すものなので任意扱いとする。
 
-読書計画作成、編集
+## 読書計画作成、編集
     book_id：必須|同じ書籍は選べない
     必須：書籍を選択してください
 
     target_date：必須
     必須：期日を選択してください
 
-新規作成時のみ有効
+## 新規作成時のみ有効
     exists：この書籍の計画は既に存在しています
     target_date.after_or_equal：本日以降の日付を選択してください

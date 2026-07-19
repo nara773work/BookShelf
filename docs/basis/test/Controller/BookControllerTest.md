@@ -1,8 +1,8 @@
 BookControllerTest
-//概要
+## 概要
 Controllerに記載されている機能をテストする
 
-test_Book_index_××
+## test_Book_index_××
 ・GETメソッドで一覧ページを表示する　
 ・表示しているビューが「Book.index」である
 ・書籍が10件のページネーションで表示されている
@@ -15,41 +15,41 @@ test_Book_index_××
 →データがシーダーで作成されるので新しい順、古い順はテストできず
 ・検索結果を維持したままページネーションが機能している
 
-test_Book_show
+## test_Book_show
 ・GETメソッドで詳細ページを表示する　
 ・表示しているビューが「Book.show」である
 ・書籍タイトル、著者、ISBN、出版日、説明、画像、ジャンル、レビュー一覧、いいね数が表示される
 
-test_Book_create（認証必須）
+## test_Book_create（認証必須）
 ・GETメソッドで作成ページを表示する　
 ・表示しているビューが「Book.create」である
 ・ゲストユーザーは/loginにリダイレクトされる
 ・書籍タイトル、著者、ISBN、出版日、説明、画像、ジャンルの入力欄が表示される
 
-test_Book_store（認証必須）
+## test_Book_store（認証必須）
 ・POSTメソッドでデータを送信する　
 ・データがDBに保存されているか検証する
 ・book.index(書籍の登録)にリダイレクトされる
 ・DBの中間テーブルbook_genreにも保存されている
 ・ジャンルは複数選択できる
 
-test_コントローラー名_edit（認証必須）
+## test_コントローラー名_edit（認証必須）
 ・GETメソッドで編集ページを表示する
 ・表示しているビューが「Book.edit」である
 
-test_コントローラー名_update（認証必須）
+## test_コントローラー名_update（認証必須）
 ・PUTメソッドでデータが更新される
 ・DBが上書きされているか検証する
 ・book.index(書籍の登録)リダイレクトされる
 
-test_コントローラー名_delete（認証必須）
+## test_コントローラー名_delete（認証必須）
 ・DELETEメソッドでデータが削除されるか
 ・DBからも削除されているか
 ・book.index(書籍の削除)リダイレクトされる
 ・関連データも処理される
 ※書籍が紐づいてるジャンルは削除できない
 
-test_toggle（認証必須）
+## test_toggle（認証必須）
 ・POSTメソッドでお気に入りといいね登録する
 ・DBのfavoritebooksテーブル（お気に入り）,review_Likes（いいね）テーブルにも紐づける
 ・2回押すとDBのそれぞれのテーブルから削除される

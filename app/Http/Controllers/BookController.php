@@ -56,7 +56,6 @@ class BookController extends Controller
 
     public function create()
     {
-
         $genres = Genre::all();
 
         return view('books.create', compact('genres'));
@@ -133,7 +132,7 @@ class BookController extends Controller
 
     public function isbn(Request $request, $isbn)
     {
-        $apiKey = 'AIzaSyAsovsHBdcHvjTLlY-zr8YGBW3QRAw9F68';
+        $apiKey = config('services.google_books.key');
 
         $response = Http::timeout(5)
             ->get('https://www.googleapis.com/books/v1/volumes',

@@ -104,19 +104,63 @@ ReadingPlanSeeder
 3.Composer依存パッケージをインストールする
 //composer install
 
-4.sailを起動する
+4.Laravel Sailをインストール
+//docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html -e COMPOSER_CACHE_DIR=/tmp/composer_cache laravelsail/php82-composer:latest composer require laravel/sail --dev
+
+5.Sailの設定ファイルをパブリッシュ（MySQLを選択）
+//docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html -e COMPOSER_CACHE_DIR=/tmp/composer_cache laravelsail/php82-composer:latest php artisan sail:install --with=mysql
+
+6.エイリアスを設定する
+//echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" >> ~/.zshrc
+//exec $SHELL
+
+7.sailを起動する
 //sail up -d
 
-5.アプリケーションキーを作成する
+8.アプリケーションキーを作成する
 //./vendor/bin/sail artisan key:generate
 
-6.初期データ投入
+9.初期データ投入
 //sail artisan migrate:fresh --seed
 
-7.Viteを設定する
+10.Viteを設定する（フロントエンドの設定）
 //sail npm install
+//sail npm install alpinejs
+//sail npm install -D tailwindcss@^3.4.0 @tailwindcss/forms postcss autoprefixer
+//sail npx tailwindcss init -p
+
+11.tailwind.config.js を以下の内容で上書きする
+//import defaultTheme from 'tailwindcss/defaultTheme';
+import forms from '@tailwindcss/forms';
+
+/** @type {import('tailwindcss').Config} */
+export default {
+    content: [
+        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+        './storage/framework/views/*.php',
+        './resources/views/**/*.blade.php',
+    ],
+    theme: {
+        extend: {
+            fontFamily: {
+                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+            },
+        },
+    },
+    plugins: [forms],
+};
+
+12.サーバー起動
 //sail npm run dev
-こちらは常に稼働させておくこと
+※こちらは常に稼働させておくこと
+
+※.env ファイルを開き、データベース接続情報が以下と一致していることを確認する
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=sail
+DB_PASSWORD=password
 
 ## 環境開発URL
 http://localhost/books

@@ -3,15 +3,15 @@
 ## Controller
 1.Auth
 2.controller.md
-・Api_BookController
-・BookController
-・ReviewController
-・GenreController
+- Api_BookController
+- BookController
+- ReviewController
+- GenreController
 (その他)
-・RankingController
-・FavoriteController
+- RankingController
+- FavoriteController
 
-・ページ推移
+- ページ推移
 　ユーザー登録画面、ログイン画面(AuthTest)
   書籍登録・更新・削除画面(Book)
 　レビュー登録・更新・削除画面(Review)
@@ -20,7 +20,7 @@
 　お気に入り画面(favorite)
 →それぞれに必要な表示がされているか確認
 
-・リレーションテスト
+- リレーションテスト
   中間テーブル[Book_genre(user.id,genre.id),favorites(user.id,book.id),reviewLikes(user.id,review.id)]
 　書籍登録時にジャンルの中間テーブルに保存、または削除されるか
   お気に入りマークを押したときに、favoritesテーブルに保存、または削除されるか
@@ -30,13 +30,13 @@
 
   外部キー[Books(user.id),reviews(user.id,book.id),readingPlans(user.id)]
 
-・DBテスト
+- DBテスト
 　DBに保存されているか、DBから削除されているか
 
-・認可テスト(Policy)
+- 認可テスト(Policy)
 　許可された人以外はその操作ができないか
 
-・認証テスト
+- 認証テスト
 　許可された人以外はその操作ができないか
 
 

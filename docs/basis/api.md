@@ -25,11 +25,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 -------------------------------------------------------------------------
 
 ## APIエンドポイント一覧
-・GET　/api/v1/books　　　　　　 ：書籍一覧を取得する　200
-・GET　/api/v1/books/{book}     ：書籍詳細を取得する　200
-・POST　/api/v1/books　　　　　　：書籍を登録する　　　201
-・PUT　/api/v1/books/{book}     ：書籍を更新する　　　200
-・DELETE　/api/v1/books/{book}　：書籍を削除する　　　204
+- GET　/api/v1/books　　　　　　 ：書籍一覧を取得する　200
+- GET　/api/v1/books/{book}     ：書籍詳細を取得する　200
+- POST　/api/v1/books　　　　　　：書籍を登録する　　　201
+- PUT　/api/v1/books/{book}     ：書籍を更新する　　　200
+- DELETE　/api/v1/books/{book}　：書籍を削除する　　　204
 存在しないIDの場合、ステータスコードは404となる。
 権限不足の場合はステータスコードは403となる。
 

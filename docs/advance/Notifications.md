@@ -3,7 +3,7 @@ Notifications
 通知一覧を表示、既読操作ができる
 
 app/Enums/ReadingPlanStatus
-## 概要
+## 役割
 ステータスを設定する
 読書中、読了、期限切れ（期日が今日を過ぎたら期限切れになる）
 
@@ -16,7 +16,7 @@ timestamp('read_at')->nullable();
 timestamps();
 
 app/notifications/ExiredNotifications,ReminderNotifications
-## 概要
+## 役割
 通知の中身を設定する
 
 期日切れ：期日が今日を過ぎると通知される　『タイトル』の期日が過ぎました

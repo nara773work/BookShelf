@@ -12,14 +12,14 @@ GET /reading-plans/{plan}/edit　//編集
 DELETE /reading-plans/{plan}　//削除
 
 ## 必要なもの
-・readingplanController
+- readingplanController
 →状態絞り込みができる、CRUD操作ができる
 
-・\App\Enums\ReadingPlanStatus::cases()
+- \App\Enums\ReadingPlanStatus::cases()
 →Enums（列挙型）に定義されている全てのcaseを配列で取得するメソッド
 planning,reading,compleatedを定義
 
-・$readingPlans
+- $readingPlans
 →readingplansテーブルを作成し、それぞれのユーザーの読書計画をリレーションで繋げる
 id,
 user_id(cascade,外部キー),
@@ -44,8 +44,8 @@ app/Console/Commands
 期限の切れた計画のステータスを期限切れに変更する→未確認
 
 以下の状態の計画にリマインダー通知を発火する
-・期限切れ
-・期日まで3日
+- 期限切れ
+- 期日まで3日
 
 
 ## ReadingPlanRequest

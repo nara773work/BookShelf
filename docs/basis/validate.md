@@ -2,6 +2,9 @@ BookRequest
 GenreRequest
 ReadingPlanRequest
 ReviewRequest
+FilterRequest
+
+※否定ではなく指示を意識した文言にするために、基本的に「〇〇して下さい」という形に統一する。
 
 ## ユーザー新規登録(app/CreateNewUser.php)
     name：必須|max:50|文字列
@@ -85,3 +88,4 @@ ReviewRequest
 ## 新規作成時のみ有効
     exists：この書籍の計画は既に存在しています
     target_date.after_or_equal：本日以降の日付を選択してください
+               

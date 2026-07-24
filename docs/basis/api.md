@@ -32,6 +32,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 - DELETE　/api/v1/books/{book}　：書籍を削除する　　　204
 存在しないIDの場合、ステータスコードは404となる。
 権限不足の場合はステータスコードは403となる。
+※更新、削除は作成者のみ許可される
 
 ## API resourceの構造
     共通

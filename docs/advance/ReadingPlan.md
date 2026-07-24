@@ -58,3 +58,7 @@ app/Console/Commands
 書籍:requierd 書籍を選択してください
 期日:required 期日を選択してください
 →本日以前の期日を選択した場合、ステータスは期限切れになる
+
+## 通知処理
+通知処理をQueue Job化し、処理失敗時にはLaravelのfailed_jobsテーブルへ記録される。
+これを実装しているため、「sail artisan queue:work」このコマンドを必ず実行する必要がある。

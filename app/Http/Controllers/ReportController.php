@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Enums\ReadingPlanStatus;
 use App\Models\Genre;
+use Illuminate\View\View;
 
 class ReportController extends Controller
 {
+    /**
+     * 読書レポートを表示する。
+     *
+     * @return View
+     */
     public function index()
     {
         $user = auth()->user();

@@ -22,7 +22,7 @@ Route::middleware('auth')
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     });
 
-// reading
+// readingPlans
 Route::middleware('auth')
     ->group(function () {
         Route::get('/reading-plans', [ReadingPlanController::class, 'index'])->name('reading-plans.index');
@@ -92,6 +92,6 @@ Route::middleware('auth')
 
         Route::post('/books/{book}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
         Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
-        Route::put('/reviews/{review}/', [ReviewController::class, 'update'])->name('reviews.update');
-        Route::delete('/reviews/{review}/', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+        Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
+        Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
     });

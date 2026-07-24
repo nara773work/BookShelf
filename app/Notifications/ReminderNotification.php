@@ -10,7 +10,9 @@ class ReminderNotification extends Notification
     use Queueable;
 
     /**
-     * Create a new notification instance.
+     * reminder通知を作成する。
+     *
+     * @param  Book  $book  通知対象の書籍
      */
     public function __construct($book)
     {
@@ -18,9 +20,10 @@ class ReminderNotification extends Notification
     }
 
     /**
-     * Get the notification's delivery channels.
+     * 通知保存先を取得する。
      *
-     * @return array<int, string>
+     * @param  object  $notifiable  通知対象ユーザー
+     * @return array<int,string>
      */
     public function via(object $notifiable): array
     {
@@ -28,7 +31,10 @@ class ReminderNotification extends Notification
     }
 
     /**
-     * Get the mail representation of the notification.
+     * データベース通知の内容を作成する。
+     *
+     * @param  mixed  $notifiable  通知対象ユーザー
+     * @return array<string,mixed>
      */
     public function toDatabase($notifiable)
     {

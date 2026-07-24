@@ -7,11 +7,16 @@ use App\Http\Requests\BookRequest;
 use App\Http\Requests\FilterRequest;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class BookController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * 書籍一覧を表示する。
+     *
+     * @param  FilterRequest  $request  検索条件
+     * @return JsonResponse
      */
     public function index(FilterRequest $request)
     {
@@ -49,7 +54,10 @@ class BookController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 書籍を登録する。
+     *
+     * @param  BookRequest  $request  登録する書籍情報
+     * @return JsonResponse
      */
     public function store(BookRequest $request)
     {
@@ -78,7 +86,10 @@ class BookController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * 書籍詳細を取得する。
+     *
+     * @param  string  $id  取得対象の書籍ID
+     * @return JsonResponse
      */
     public function show(string $id)
     {
@@ -98,7 +109,11 @@ class BookController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * 書籍を更新する。
+     *
+     * @param  BookRequest  $request  更新する書籍情報
+     * @param  string  $id  更新対象の書籍ID
+     * @return JsonResponse
      */
     public function update(BookRequest $request, string $id)
     {
@@ -135,7 +150,10 @@ class BookController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 書籍を削除する。
+     *
+     * @param  string  $id  削除対象の書籍ID
+     * @return Response
      */
     public function destroy(string $id)
     {

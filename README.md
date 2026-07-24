@@ -28,6 +28,10 @@ Laravelを用いてCRUD機能、認証・認可、公開API、リマインダー
 　POST / PUT / DELETE はLaravel Sanctumによる認証が必要
 　エンドポイント一覧を下記に表記。
 
+- 認証補助
+　パーソナルアクセストークン：Laravel Sanctumを利用し、API認証用のアクセストークンを発行する。
+　失敗Job：通知処理をQueue Job化し、処理失敗時にはLaravelのfailed_jobsテーブルへ記録される。
+
 ## 応用機能　
 - 検索フィルタ
 　著者やタイトルに含まれる文字で検索をかけることができる。
@@ -94,6 +98,7 @@ ReadingPlanSeeder
 - 開発ツール : Docker, Laravel Sail, phpMyAdmin
 
 ## 環境構築手順
+```bash
 1.gitリポジトリをクローンした後、プロジェクトに移動する
 //git clone <リポジトリURL>
 //cd <プロジェクト名>
@@ -118,7 +123,7 @@ ReadingPlanSeeder
 //sail up -d
 
 8.アプリケーションキーを作成する
-//./vendor/bin/sail artisan key:generate
+//sail artisan key:generate
 
 9.初期データ投入
 //sail artisan migrate:fresh --seed
@@ -153,6 +158,10 @@ export default {
 12.サーバー起動
 //sail npm run dev
 ※こちらは常に稼働させておくこと
+
+13.queue起動 
+//sail artisan queue:
+※こちらは常に稼働させておくこと。稼働しないと通知が来ない。
 
 ※.env ファイルを開き、データベース接続情報が以下と一致していることを確認する
 DB_CONNECTION=mysql

@@ -2,6 +2,9 @@
 
 namespace App\Enums;
 
+/**
+ * 読書計画の状態を管理するEnum。
+ */
 enum ReadingPlanStatus: string
 {
     case Reading = 'reading';

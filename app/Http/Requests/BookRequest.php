@@ -29,7 +29,7 @@ class BookRequest extends FormRequest
             'isbn' => ['required', 'digits:13',
                 Rule::unique('books', 'isbn')
                     ->ignore($this->book), ],
-            'published_date' => ['nullable'],// APIで取得できない可能性があり、検索等で使用しないためnullableに変更
+            'published_date' => ['nullable'], // APIで取得できない可能性があり、検索等で使用しないためnullableに変更
             'description' => ['nullable'], // 説明の中で数字を使う可能性を考慮し文字列のみにしない
             'image_url' => ['nullable'],
             'genres' => ['required'],

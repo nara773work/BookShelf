@@ -13,6 +13,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Contracts\LogoutResponse;
+use App\Http\Responses\LogoutResponse as CustomLogoutResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -52,6 +54,11 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::registerView(function () {
             return view('auth.register');
         });
+
+        $this->app->singleton(
+            LogoutResponse::class,
+            CustomLogoutResponse::class
+        );
 
     }
 }

@@ -320,7 +320,7 @@ class ApiBookControllerTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_ap_i_delete(): void
+    public function test_api_delete(): void
     {
         $user = User::with('books')->first();
         $book = $user->books->first();
@@ -352,7 +352,7 @@ class ApiBookControllerTest extends TestCase
         ]);
     }
 
-    public function test_ap_i_delete_auth(): void
+    public function test_api_delete_auth(): void
     {
         $book = Book::first();
         $otherUser = User::where('id', '!=', $book->user_id)->first();

@@ -25,8 +25,10 @@ class ReadingPlanRequest extends FormRequest
     {
         if ($this->isMethod('post')) {
             return [
-                'book_id' => ['exists:books,id',
-                    Rule::unique('reading_plans')
+                'book_id' => [
+                    'required',
+                    'exists:books,id',
+                    Rule::unique('reading_plans', 'book_id')
                         ->where(function ($query) {
                             return $query->where('user_id', auth()->id());
                         }),

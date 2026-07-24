@@ -160,8 +160,15 @@ export default {
 ※こちらは常に稼働させておくこと
 
 13.queue起動 
-//sail artisan queue:
-※こちらは常に稼働させておくこと。稼働しないと通知が来ない。
+//sail artisan queue:work
+※こちらは常に稼働させておくこと。
+
+14.Schedule起動
+//sail artisan schedule:work
+※こちらは常に稼働させておくこと。
+
+15．.envファイルを開き、以下のように書き換える
+QUEUE_CONNECTION=database
 
 ※.env ファイルを開き、データベース接続情報が以下と一致していることを確認する
 DB_CONNECTION=mysql

@@ -29,8 +29,18 @@ Laravelを用いてCRUD機能、認証・認可、公開API、リマインダー
 　エンドポイント一覧を下記に表記。
 
 - 認証補助
-　パーソナルアクセストークン：Laravel Sanctumを利用し、API認証用のアクセストークンを発行する。
-　失敗Job：通知処理をQueue Job化し、処理失敗時にはLaravelのfailed_jobsテーブルへ記録される。
+　パーソナルアクセストークン：Laravel Sanctumを利用し、API認証用のパーソナルアクセストークンを発行する。
+
+　Queue処理：通知処理をQueue Job化し、非同期処理として実行する。処理失敗時にはLaravelのfailed_jobsテーブルへ記録される。
+
+　パスワードリセット：メール送信画面にresources/views/password/forget.blade.phpを、パスワードリセット画面にresources/views/password/reset.blade.phpを作成。
+　以下の手順でパスワードリセットが可能。
+
+1.http://localhost/forgot-passwordにアクセスする。
+2.登録されているメールアドレスを入力する。
+3.logを開き、URLを確認する。webブラウザでそのURLにアクセスする。
+4.新しいパスワードを入力する。
+5.ログイン画面にリダイレクトされる。
 
 ## 応用機能　
 - 検索フィルタ
@@ -50,8 +60,8 @@ Laravelを用いてCRUD機能、認証・認可、公開API、リマインダー
 - 公開APIへの Sanctum によるトークン認証追加
 
 - 読書計画とリマインダー通知
-　ステータスを読書中、読了、期限切れ（読了にならずに日付が本日を過ぎてしまった）の3つに設定する。
-　期限切れになった計画を自動的に期限切れステータスへ変更。
+　ステータスは「読書中」「読了」「期限切れ」の3種類で管理する。
+　期限日を過ぎても読了になっていない計画は、自動的に期限切れへ変更する。
 　期日が残り三日になった計画にリマインダー通知を、期限が過ぎてしまった計画に期限切れ通知をそれぞれ発火する。
 
 ※docsにそれぞれの詳細設計をまとめたので各機能の詳しい内容はそちらを参照。
@@ -62,8 +72,8 @@ GET　/api/v1/books/{book}     ：書籍詳細を取得する
 POST　/api/v1/books　　　　　　：書籍を登録する
 PUT　/api/v1/books/{book}     ：書籍を更新する
 DELETE　/api/v1/books/{book}　：書籍を削除する
-※Laravel Sanctumを導入し、認証＋認可を行っている。
-　Bearerトークン（Authorization ヘッダ）による認証方式である。
+※POST / PUT / DELETE はLaravel SanctumによるBearerトークン認証が必要。
+　また、所有者チェックによる認可を行っている。
 
 認可を通す方法
 1.POST：http://localhost/api/v1/login
@@ -109,74 +119,45 @@ ReadingPlanSeeder
 3.Composer依存パッケージをインストールする
 //composer install
 
-4.Laravel Sailをインストール
-//docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html -e COMPOSER_CACHE_DIR=/tmp/composer_cache laravelsail/php82-composer:latest composer require laravel/sail --dev
-
-5.Sailの設定ファイルをパブリッシュ（MySQLを選択）
-//docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html -e COMPOSER_CACHE_DIR=/tmp/composer_cache laravelsail/php82-composer:latest php artisan sail:install --with=mysql
-
-6.エイリアスを設定する
+4.エイリアスを設定する
 //echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" >> ~/.zshrc
 //exec $SHELL
 
-7.sailを起動する
+5.sailを起動する
 //sail up -d
 
-8.アプリケーションキーを作成する
+6.アプリケーションキーを作成する
 //sail artisan key:generate
 
-9.初期データ投入
+7.初期データ投入
 //sail artisan migrate:fresh --seed
 
-10.Viteを設定する（フロントエンドの設定）
-//sail npm install
-//sail npm install alpinejs
-//sail npm install -D tailwindcss@^3.4.0 @tailwindcss/forms postcss autoprefixer
-//sail npx tailwindcss init -p
+※.env ファイルを開き、データベース接続情報が以下と一致していることを確認する
 
-11.tailwind.config.js を以下の内容で上書きする
-//import defaultTheme from 'tailwindcss/defaultTheme';
-import forms from '@tailwindcss/forms';
-
-/** @type {import('tailwindcss').Config} */
-export default {
-    content: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './storage/framework/views/*.php',
-        './resources/views/**/*.blade.php',
-    ],
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-            },
-        },
-    },
-    plugins: [forms],
-};
-
-12.サーバー起動
-//sail npm run dev
-※こちらは常に稼働させておくこと
-
-13.queue起動 
-//sail artisan queue:work
-※こちらは常に稼働させておくこと。
-
-14.Schedule起動
-//sail artisan schedule:work
-※こちらは常に稼働させておくこと。
-
-15．.envファイルを開き、以下のように書き換える
 QUEUE_CONNECTION=database
 
-※.env ファイルを開き、データベース接続情報が以下と一致していることを確認する
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
 DB_DATABASE=laravel
 DB_USERNAME=sail
 DB_PASSWORD=password
+
+8.Viteを設定する（フロントエンドの設定）
+//sail npm install
+
+9.サーバー起動
+//sail npm run dev
+※こちらは常に稼働させておくこと
+
+10.queue起動 
+//sail artisan queue:work
+※こちらは常に稼働させておくこと。
+
+11.Schedule起動
+//sail artisan schedule:work
+※ローカル環境でスケジュール実行確認するためschedule:workを使用。
+※こちらは常に稼働させておくこと。
 
 ## 環境開発URL
 http://localhost/books

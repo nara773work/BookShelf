@@ -117,19 +117,25 @@ ReadingPlanSeeder
 //cp .env.example .env
 
 3.Composer依存パッケージをインストールする
-//composer install
+//composer 
 
-4.エイリアスを設定する
+4.Laravel Sailをインストール
+//docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html -e COMPOSER_CACHE_DIR=/tmp/composer_cache laravelsail/php82-composer:latest composer require laravel/sail --dev
+
+5.Sailの設定ファイルをパブリッシュ（MySQLを選択）
+//docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html -e COMPOSER_CACHE_DIR=/tmp/composer_cache laravelsail/php82-composer:latest php artisan sail:install --with=mysql
+
+6.エイリアスを設定する
 //echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" >> ~/.zshrc
 //exec $SHELL
 
-5.sailを起動する
+7.sailを起動する
 //sail up -d
 
-6.アプリケーションキーを作成する
+8.アプリケーションキーを作成する
 //sail artisan key:generate
 
-7.初期データ投入
+9.初期データ投入
 //sail artisan migrate:fresh --seed
 
 ※.env ファイルを開き、データベース接続情報が以下と一致していることを確認する

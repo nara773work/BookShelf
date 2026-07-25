@@ -117,7 +117,7 @@ ReadingPlanSeeder
 //cp .env.example .env
 
 3.Composer依存パッケージをインストールする
-//composer 
+//composer install
 
 4.Laravel Sailをインストール
 //docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html -e COMPOSER_CACHE_DIR=/tmp/composer_cache laravelsail/php82-composer:latest composer require laravel/sail --dev

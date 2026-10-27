@@ -124,6 +124,14 @@ class ReadingPlanController extends Controller
             ]);
         }
 
+        if ($plans = ReadingPlan::whereDate('target_date', '>=', $today)) {
+            $plan->update([
+
+                'status' => ReadingPlanStatus::Reading,
+            ]);
+        }
+
+
         return redirect()->route('reading-plans.index')
             ->with('success', '読書計画を更新しました');
     }

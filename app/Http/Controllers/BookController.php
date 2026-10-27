@@ -199,6 +199,7 @@ class BookController extends Controller
      */
     public function isbn(Request $request, $isbn)
     {
+        dd('ここまで来た');
         $apiKey = config('services.google_books.key');
 
         $response = Http::timeout(5)

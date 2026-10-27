@@ -16,18 +16,6 @@ use Illuminate\Support\Facades\Notification;
 class ExpiredNotificationJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    /**
-     * Create a new job instance.
-     */
-
-    /**
-     * Execute the job.
-     */
-
-    /**
-     * 通知処理を実行する。
-     */
     public function handle(): void
     {
         $today = Carbon::today();
